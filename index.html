@@ -222,11 +222,29 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 }
 .card.multi-char { font-size: 36px; min-width: 120px; }
 .card.long-char  { font-size: 28px; min-width: 160px; }
-.card .weak-badge {
-  position: absolute; top: -5px; right: -5px; background: #ff6b6b; color: white;
-  border-radius: 50%; width: 20px; height: 20px; font-size: 11px;
-  display: flex; align-items: center; justify-content: center; font-weight: bold;
+
+/* ====== 新徽章樣式 ====== */
+.card .word-badge {
+  position: absolute; top: -10px; right: -10px;
+  font-size: 20px;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+  line-height: 1;
+  pointer-events: none;
 }
+
+/* ====== 報告頁字詞可點擊發音 ====== */
+.report-word {
+  padding: 8px 18px; border-radius: 12px; font-size: 26px; font-weight: bold;
+  color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.report-word:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.report-word:active { transform: scale(0.95); }
+.report-word.known   { background: linear-gradient(135deg, #48c774, #36d1dc); }
+.report-word.unknown { background: linear-gradient(135deg, #ff6b6b, #ffa500); }
+.sound-icon { font-size: 16px; opacity: 0.85; }
+
 #page-report { padding-top: 20px; position: relative; z-index: 1; }
 .report-container {
   background: rgba(255,255,255,0.95); border-radius: 30px; padding: 35px 45px;
@@ -262,9 +280,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .report-section h3.known-title   { border-color: #48c774; color: #388e3c; }
 .report-section h3.unknown-title { border-color: #ff6b6b; color: #c62828; }
 .report-words { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 0; }
-.report-word { padding: 8px 18px; border-radius: 12px; font-size: 26px; font-weight: bold; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
-.report-word.known   { background: linear-gradient(135deg, #48c774, #36d1dc); }
-.report-word.unknown { background: linear-gradient(135deg, #ff6b6b, #ffa500); }
+.report-hint { font-size: 13px; color: #bbb; margin-bottom: 8px; }
 .report-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
 .empty-message { color: #bbb; font-size: 16px; font-style: italic; padding: 8px; }
 .cumulative-stats { background: linear-gradient(135deg, #e3f2fd, #e8f5e9); border-radius: 20px; padding: 20px; margin: 20px 0; text-align: left; }
@@ -363,6 +379,14 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
 }
+
+/* 徽章圖例說明 */
+.badge-legend {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin: 8px 0; font-size: 13px; color: #888;
+}
+.badge-legend-item { display: flex; align-items: center; gap: 4px; }
+
 @media (max-width: 600px) {
   .input-container, .report-container, .parent-container { padding: 20px 16px; }
   .player-card { padding: 18px 20px; min-width: 100px; }
@@ -385,6 +409,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 
 <div class="skyline" id="skyline"></div>
 
+<!-- PAGE 0: PLAYER SELECT -->
 <div id="page-player" class="page">
   <div class="player-container">
     <div style="font-size:18px;letter-spacing:2px;color:#999;margin-bottom:5px;">&#10022; HAYDEN &amp; CELINE &#10022;</div>
@@ -410,6 +435,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   </div>
 </div>
 
+<!-- PAGE 1: INPUT -->
 <div id="page-input" class="page">
   <div class="input-container">
     <div class="game-logo">&#10022; HAYDEN &amp; CELINE &#10022;</div>
@@ -432,6 +458,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   </div>
 </div>
 
+<!-- PAGE 2: GAME -->
 <div id="page-game" class="page">
   <div class="game-top">
     <div class="current-player-badge" id="current-player-badge">
@@ -450,6 +477,12 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       <div class="route-stop"><div class="route-icon" id="stop-4">&#127905;</div><div class="route-label" id="label-4">遊樂場</div></div>
       <div class="route-line" id="line-4"></div>
       <div class="route-stop"><div class="route-icon" id="stop-5">&#127984;</div><div class="route-label" id="label-5">城堡</div></div>
+    </div>
+    <!-- 徽章圖例 -->
+    <div class="badge-legend">
+      <div class="badge-legend-item">&#9728;&#65039; 新字</div>
+      <div class="badge-legend-item">&#11088; 認識中</div>
+      <div class="badge-legend-item">&#128170; 需加強</div>
     </div>
     <div class="scene-display" id="scene-display">
       <span class="scene-icon" id="scene-icon-display">&#127968;</span>
@@ -473,6 +506,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   <div class="cards-area" id="cards-area"></div>
 </div>
 
+<!-- PAGE 3: REPORT -->
 <div id="page-report" class="page">
   <div class="report-container">
     <h1>&#128212; <span id="report-name">冒險</span>日記</h1>
@@ -498,10 +532,12 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
     </div>
     <div class="report-section">
       <h3 class="known-title">&#9989; 成功找回的文字</h3>
+      <p class="report-hint">&#128263; 點字可以聽發音</p>
       <div class="report-words" id="known-words"></div>
     </div>
     <div class="report-section">
       <h3 class="unknown-title">&#128269; 還藏在城市裡的文字</h3>
+      <p class="report-hint">&#128263; 點字可以聽發音，下次繼續加油！</p>
       <div class="report-words" id="unknown-words"></div>
     </div>
     <div class="report-buttons">
@@ -511,6 +547,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   </div>
 </div>
 
+<!-- PAGE 4: PARENT -->
 <div id="page-parent" class="page">
   <div class="parent-container">
     <h1>&#128274; 家長管理後台</h1>
@@ -573,11 +610,11 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
     <div class="tab-content" id="tab-reset">
       <div class="reset-section">
         <h3>&#9888;&#65039; 重設數據（測試用）</h3>
-        <p>&#9888;&#65039; 注意：重設後數據<b>無法復原</b>！<br>適合在測試階段使用，正式使用前請先重設。</p>
+        <p>&#9888;&#65039; 注意：重設後數據<b>無法復原</b>！</p>
         <div class="reset-options">
-          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('hayden')">&#128465;&#65039; 重設 Hayden 的學習記錄</button>
-          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('celine')">&#128465;&#65039; 重設 Celine 的學習記錄</button>
-          <button class="btn btn-reset btn-sm" onclick="resetAllPlayerData()">&#128465;&#65039; 重設所有玩家記錄</button>
+          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('hayden')">&#128465;&#65039; 重設 Hayden</button>
+          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('celine')">&#128465;&#65039; 重設 Celine</button>
+          <button class="btn btn-reset btn-sm" onclick="resetAllPlayerData()">&#128465;&#65039; 重設所有玩家</button>
           <button class="btn btn-sm" style="background:linear-gradient(135deg,#ff6b6b,#c0392b);color:white;" onclick="resetEverything()">&#128165; 全部清除</button>
         </div>
         <div id="reset-status" style="margin-top:15px;font-size:15px;color:#388e3c;font-weight:bold;"></div>
@@ -597,7 +634,7 @@ import {
   query, orderBy, limit, serverTimestamp, writeBatch
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyChKoSDCKkFqCppD90B2NQ0V5Cc3z_jtQ4",
   authDomain: "chinese-word-datebase.firebaseapp.com",
   projectId: "chinese-word-datebase",
@@ -606,8 +643,8 @@ const firebaseConfig = {
   appId: "1:237822090954:web:02ff2b231f40a49e735e33"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+var app = initializeApp(firebaseConfig);
+var db = getFirestore(app);
 
 // ====== STATE ======
 var currentPlayer = '';
@@ -627,9 +664,9 @@ var PARENT_PIN = '1234';
 var scenes = [
   { name: '我的家',     icon: '\u{1F3E0}', sky: '\u{1F305}', bg: 'scene-home',   items: ['\u{1F3E0}','\u{1F511}','\u{1F6CF}','\u{1F9F8}','\u{1F33C}','\u{1F497}'] },
   { name: '城市公園',   icon: '\u{1F333}', sky: '\u2600\uFE0F', bg: 'scene-park',   items: ['\u{1F388}','\u{1F98B}','\u{1F338}','\u{1F43F}','\u{1F340}','\u{1F33A}','\u{1F41E}','\u{1F33B}'] },
-  { name: '熱鬧商店街', icon: '\u{1F3EA}', sky: '\u26C5', bg: 'scene-shop',   items: ['\u{1F366}','\u{1F9C1}','\u{1F381}','\u{1F6CD}','\u{1F369}','\u{1F9F8}','\u{1F36D}','\u{1F380}'] },
-  { name: '快樂學校',   icon: '\u{1F3EB}', sky: '\u{1F307}', bg: 'scene-school', items: ['\u{1F4DA}','\u2B50','\u{1F3C5}','\u270F\uFE0F','\u{1F4D6}','\u{1F393}','\u{1F514}','\u{1F4D0}'] },
-  { name: '歡樂遊樂場', icon: '\u{1F3A1}', sky: '\u{1F306}', bg: 'scene-fun',    items: ['\u{1F3A0}','\u{1F3AA}','\u{1F31F}','\u{1F3A2}','\u{1F3AD}','\u{1F3B5}','\u{1F3A8}','\u{1F3AF}'] },
+  { name: '熱鬧商店街', icon: '\u{1F3EA}', sky: '\u26C5',      bg: 'scene-shop',   items: ['\u{1F366}','\u{1F9C1}','\u{1F381}','\u{1F6CD}','\u{1F369}','\u{1F9F8}','\u{1F36D}','\u{1F380}'] },
+  { name: '快樂學校',   icon: '\u{1F3EB}', sky: '\u{1F307}',  bg: 'scene-school', items: ['\u{1F4DA}','\u2B50','\u{1F3C5}','\u270F\uFE0F','\u{1F4D6}','\u{1F393}','\u{1F514}','\u{1F4D0}'] },
+  { name: '歡樂遊樂場', icon: '\u{1F3A1}', sky: '\u{1F306}',  bg: 'scene-fun',    items: ['\u{1F3A0}','\u{1F3AA}','\u{1F31F}','\u{1F3A2}','\u{1F3AD}','\u{1F3B5}','\u{1F3A8}','\u{1F3AF}'] },
   { name: '勝利城堡！', icon: '\u{1F3F0}', sky: '\u{1F319}\u2728', bg: 'scene-castle', items: ['\u{1F3C6}','\u{1F451}','\u{1F386}','\u{1F48E}','\u{1F319}','\u{1F4AB}','\u{1F52E}','\u2728'] }
 ];
 
@@ -669,53 +706,90 @@ function setBodyScene(cls) {
   document.body.classList.remove.apply(document.body.classList, all);
   document.body.classList.add(cls);
 }
-
 function showPage(id) {
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-
 function pickRandom(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
-
 function shuffle(arr) {
   var a = arr.slice();
-  for (var i = a.length-1; i > 0; i--) {
-    var j = Math.floor(Math.random()*(i+1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  for (var i=a.length-1; i>0; i--) {
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
   }
   return a;
 }
-
 function parseInput(text) {
   var parts = text.split(/[\s,，、;；\n\r]+/);
-  var seen = {}, result = [];
-  for (var i=0; i<parts.length; i++) {
-    var t = parts[i].trim();
-    if (t.length > 0 && !seen[t]) { seen[t]=true; result.push(t); }
+  var seen={}, result=[];
+  for (var i=0;i<parts.length;i++) {
+    var t=parts[i].trim();
+    if (t.length>0 && !seen[t]) { seen[t]=true; result.push(t); }
   }
   return result;
 }
-
 function hideLoading() { document.getElementById('loading-overlay').style.display='none'; }
 function showLoading(text) {
-  var lo = document.getElementById('loading-overlay');
-  lo.querySelector('.loading-text').textContent = text || '載入中...';
+  var lo=document.getElementById('loading-overlay');
+  lo.querySelector('.loading-text').textContent = text||'載入中...';
   lo.style.display='flex';
 }
+
+// ====== SPEECH 粵語朗讀 ======
+function speakWord(word) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var utter = new SpeechSynthesisUtterance(word);
+  utter.rate   = 0.8;
+  utter.pitch  = 1.1;
+  utter.volume = 1;
+  var voices = window.speechSynthesis.getVoices();
+  var voice = null;
+  // 優先 zh-HK 粵語
+  for (var i=0;i<voices.length;i++) {
+    if (voices[i].lang==='zh-HK') { voice=voices[i]; break; }
+  }
+  // 其次 zh-TW
+  if (!voice) {
+    for (var j=0;j<voices.length;j++) {
+      if (voices[j].lang==='zh-TW') { voice=voices[j]; break; }
+    }
+  }
+  // 最後任何中文
+  if (!voice) {
+    for (var k=0;k<voices.length;k++) {
+      if (voices[k].lang.indexOf('zh')!==-1) { voice=voices[k]; break; }
+    }
+  }
+  if (voice) { utter.voice=voice; utter.lang=voice.lang; }
+  else { utter.lang='zh-HK'; }
+  window.speechSynthesis.speak(utter);
+}
+
+// 預載聲音
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function() {
+    window.speechSynthesis.getVoices();
+  };
+}
+
+// 讓 speakWord 可以在 HTML onclick 中使用
+window.speakWord = speakWord;
 
 // ====== AUDIO ======
 function playSound(freqArr, startGap, duration) {
   try {
-    if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    var now = audioCtx.currentTime;
-    for (var i=0; i<freqArr.length; i++) {
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
+    if (!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    var now=audioCtx.currentTime;
+    for (var i=0;i<freqArr.length;i++) {
+      var osc=audioCtx.createOscillator();
+      var gain=audioCtx.createGain();
       osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.frequency.value = freqArr[i]; osc.type = 'sine';
-      gain.gain.setValueAtTime(0.13, now+i*startGap);
-      gain.gain.exponentialRampToValueAtTime(0.001, now+i*startGap+duration);
+      osc.frequency.value=freqArr[i]; osc.type='sine';
+      gain.gain.setValueAtTime(0.13,now+i*startGap);
+      gain.gain.exponentialRampToValueAtTime(0.001,now+i*startGap+duration);
       osc.start(now+i*startGap); osc.stop(now+i*startGap+duration);
     }
   } catch(e){}
@@ -728,32 +802,30 @@ function playMilestoneSound()   { playSound([440,554,659],0.12,0.3); }
 function buildSkyline() {
   var widths  = [30,18,40,15,35,20,45,22,28,50,16,38,25,42,20,30,18,35,15,40,25];
   var heights = [60,90,45,70,80,55,100,65,50,110,40,75,85,95,60,70,55,80,45,90,65];
-  var html = '<div class="skyline-buildings">';
-  for (var i=0; i<widths.length; i++) {
-    html += '<div class="building" style="width:' + widths[i] + 'px;height:' + heights[i] + 'px;"></div>';
+  var html='<div class="skyline-buildings">';
+  for (var i=0;i<widths.length;i++) {
+    html+='<div class="building" style="width:'+widths[i]+'px;height:'+heights[i]+'px;"></div>';
   }
-  html += '</div>';
-  document.getElementById('skyline').innerHTML = html;
+  html+='</div>';
+  document.getElementById('skyline').innerHTML=html;
 }
 
 // ====== FIREBASE: WORD LIBRARY ======
 async function loadWordLibrary() {
   try {
-    var snap = await getDocs(collection(db,'wordLibrary'));
-    fullWordLibrary = [];
+    var snap=await getDocs(collection(db,'wordLibrary'));
+    fullWordLibrary=[];
     snap.forEach(function(d){ fullWordLibrary.push(Object.assign({id:d.id},d.data())); });
     return fullWordLibrary;
-  } catch(e) { console.error(e); return []; }
+  } catch(e){ console.error(e); return []; }
 }
-
 async function addWordToLibrary(word, category) {
-  category = category || '一般';
-  var exists = fullWordLibrary.find(function(w){ return w.word===word; });
+  category=category||'一般';
+  var exists=fullWordLibrary.find(function(w){ return w.word===word; });
   if (exists) return false;
-  await addDoc(collection(db,'wordLibrary'), { word:word, category:category, addedDate:serverTimestamp(), addedBy:'parent' });
+  await addDoc(collection(db,'wordLibrary'),{word:word,category:category,addedDate:serverTimestamp(),addedBy:'parent'});
   return true;
 }
-
 async function deleteWordFromLibrary(docId) {
   await deleteDoc(doc(db,'wordLibrary',docId));
 }
@@ -761,81 +833,76 @@ async function deleteWordFromLibrary(docId) {
 // ====== FIREBASE: PLAYER STATS ======
 async function loadPlayerStats(player) {
   try {
-    var snap = await getDocs(collection(db,'players',player,'wordStats'));
-    wordStatsMap = {};
-    snap.forEach(function(d){ wordStatsMap[d.data().word] = d.data(); });
+    var snap=await getDocs(collection(db,'players',player,'wordStats'));
+    wordStatsMap={};
+    snap.forEach(function(d){ wordStatsMap[d.data().word]=d.data(); });
     return wordStatsMap;
-  } catch(e) { console.error(e); return {}; }
+  } catch(e){ console.error(e); return {}; }
 }
-
 async function saveWordResult(player, word, success) {
   try {
-    var existing = wordStatsMap[word];
-    var statsRef = doc(db,'players',player,'wordStats',word);
+    var existing=wordStatsMap[word];
+    var statsRef=doc(db,'players',player,'wordStats',word);
     if (existing) {
-      var updated = {
-        word: word,
-        shown:   (existing.shown||0)+1,
-        success: (existing.success||0)+(success?1:0),
-        fail:    (existing.fail||0)+(success?0:1),
-        lastSeen: serverTimestamp()
+      var updated={
+        word:word,
+        shown:(existing.shown||0)+1,
+        success:(existing.success||0)+(success?1:0),
+        fail:(existing.fail||0)+(success?0:1),
+        lastSeen:serverTimestamp()
       };
-      await setDoc(statsRef, updated);
-      wordStatsMap[word] = updated;
+      await setDoc(statsRef,updated);
+      wordStatsMap[word]=updated;
     } else {
-      var newStat = { word:word, shown:1, success:success?1:0, fail:success?0:1, lastSeen:serverTimestamp() };
-      await setDoc(statsRef, newStat);
-      wordStatsMap[word] = newStat;
+      var newStat={word:word,shown:1,success:success?1:0,fail:success?0:1,lastSeen:serverTimestamp()};
+      await setDoc(statsRef,newStat);
+      wordStatsMap[word]=newStat;
     }
   } catch(e){ console.error(e); }
 }
-
 async function saveSession(player, played, known, unknownList) {
   try {
-    var pct = Math.round(known/played*100);
-    await addDoc(collection(db,'players',player,'sessions'), {
-      date:serverTimestamp(), played:played, known:known,
-      unknown:unknownList.length, percentage:pct,
-      durationMs: Date.now()-sessionStartTime
+    var pct=Math.round(known/played*100);
+    await addDoc(collection(db,'players',player,'sessions'),{
+      date:serverTimestamp(),played:played,known:known,
+      unknown:unknownList.length,percentage:pct,
+      durationMs:Date.now()-sessionStartTime
     });
   } catch(e){ console.error(e); }
 }
-
 async function getPlayerSummary(player) {
   try {
-    var snap = await getDocs(collection(db,'players',player,'wordStats'));
-    var totalShown=0, totalSuccess=0, knownCount=0;
+    var snap=await getDocs(collection(db,'players',player,'wordStats'));
+    var totalShown=0,totalSuccess=0,knownCount=0;
     snap.forEach(function(d){
-      var s = d.data();
-      totalShown   += (s.shown||0);
-      totalSuccess += (s.success||0);
-      if (s.shown>0 && (s.success/s.shown)>=0.8) knownCount++;
+      var s=d.data();
+      totalShown+=(s.shown||0);
+      totalSuccess+=(s.success||0);
+      if (s.shown>0&&(s.success/s.shown)>=0.8) knownCount++;
     });
-    var sessSnap = await getDocs(collection(db,'players',player,'sessions'));
-    return { totalWords:snap.size, knownCount:knownCount, sessions:sessSnap.size, avgRate:totalShown>0?Math.round(totalSuccess/totalShown*100):0 };
+    var sessSnap=await getDocs(collection(db,'players',player,'sessions'));
+    return {totalWords:snap.size,knownCount:knownCount,sessions:sessSnap.size,avgRate:totalShown>0?Math.round(totalSuccess/totalShown*100):0};
   } catch(e){ return {totalWords:0,knownCount:0,sessions:0,avgRate:0}; }
 }
 
 // ====== SMART WORD SELECTION ======
 function selectSmartWords(library, stats, maxCount) {
-  maxCount = maxCount || 100;
-  var now = Date.now();
-  var scored = library.map(function(item) {
-    var w = item.word;
-    var s = stats[w];
-    var priority = 0;
-    if (!s || s.shown===0) {
-      priority = 100;
+  maxCount=maxCount||100;
+  var now=Date.now();
+  var scored=library.map(function(item){
+    var w=item.word, s=stats[w], priority=0;
+    if (!s||s.shown===0) {
+      priority=100;
     } else {
-      var rate = s.success/s.shown;
+      var rate=s.success/s.shown;
       if (rate<0.3)       priority=90;
       else if (rate<0.5)  priority=75;
       else if (rate<0.7)  priority=55;
       else if (rate<0.85) priority=35;
       else                priority=15;
       if (s.lastSeen) {
-        var lastMs = s.lastSeen.toMillis ? s.lastSeen.toMillis() : (s.lastSeen.seconds*1000);
-        var daysSince = (now-lastMs)/(1000*60*60*24);
+        var lastMs=s.lastSeen.toMillis?s.lastSeen.toMillis():(s.lastSeen.seconds*1000);
+        var daysSince=(now-lastMs)/(1000*60*60*24);
         if (daysSince>30)      priority+=40;
         else if (daysSince>14) priority+=25;
         else if (daysSince>7)  priority+=15;
@@ -853,9 +920,9 @@ async function init() {
   buildSkyline();
   showLoading('連接城市資料庫...');
   await loadWordLibrary();
-  var hSummary = await getPlayerSummary('hayden');
-  var cSummary = await getPlayerSummary('celine');
-  updatePlayerPreviews(hSummary, cSummary);
+  var hSummary=await getPlayerSummary('hayden');
+  var cSummary=await getPlayerSummary('celine');
+  updatePlayerPreviews(hSummary,cSummary);
   hideLoading();
   setBodyScene('scene-player');
   showPage('page-player');
@@ -863,54 +930,52 @@ async function init() {
 
 function updatePlayerPreviews(hSummary, cSummary) {
   document.getElementById('hayden-preview').textContent =
-    hSummary.knownCount > 0 ? '認識 ' + hSummary.knownCount + ' 個字 ⭐' : '開始第一次冒險！';
+    hSummary.knownCount>0 ? '認識 '+hSummary.knownCount+' 個字 ⭐' : '開始第一次冒險！';
   document.getElementById('celine-preview').textContent =
-    cSummary.knownCount > 0 ? '認識 ' + cSummary.knownCount + ' 個字 ⭐' : '開始第一次冒險！';
+    cSummary.knownCount>0 ? '認識 '+cSummary.knownCount+' 個字 ⭐' : '開始第一次冒險！';
 }
 
 // ====== PLAYER SELECT ======
 window.selectPlayer = async function(player) {
-  currentPlayer = player;
+  currentPlayer=player;
   showLoading('準備冒險裝備...');
   await loadPlayerStats(player);
   hideLoading();
-  if (fullWordLibrary.length === 0) {
-    document.getElementById('input-char-name').textContent = charNames[player];
+  if (fullWordLibrary.length===0) {
+    document.getElementById('input-char-name').textContent=charNames[player];
     setBodyScene('scene-home');
     showPage('page-input');
   } else {
-    allWords = selectSmartWords(fullWordLibrary, wordStatsMap, 100);
+    allWords=selectSmartWords(fullWordLibrary,wordStatsMap,100);
     startGameDirect();
   }
 };
 
 // ====== PIN ENTRY ======
 window.showPinEntry = function() {
-  var overlay = document.createElement('div');
-  overlay.className = 'celebration';
-  overlay.id = 'pin-overlay';
-  overlay.innerHTML =
-    '<div class="pin-container">' +
-    '<h2>&#128274; 家長登入</h2>' +
-    '<input type="password" class="pin-input" id="pin-input-field" placeholder="••••" maxlength="4" oninput="if(this.value.length===4) checkPin()" />' +
-    '<div class="pin-error" id="pin-error"></div>' +
-    '<div style="margin-top:15px;"><button class="btn btn-back btn-sm" onclick="document.getElementById(\'pin-overlay\').remove()">取消</button></div>' +
+  var overlay=document.createElement('div');
+  overlay.className='celebration';
+  overlay.id='pin-overlay';
+  overlay.innerHTML=
+    '<div class="pin-container">'+
+    '<h2>&#128274; 家長登入</h2>'+
+    '<input type="password" class="pin-input" id="pin-input-field" placeholder="••••" maxlength="4" oninput="if(this.value.length===4) checkPin()" />'+
+    '<div class="pin-error" id="pin-error"></div>'+
+    '<div style="margin-top:15px;"><button class="btn btn-back btn-sm" onclick="document.getElementById(\'pin-overlay\').remove()">取消</button></div>'+
     '</div>';
   document.body.appendChild(overlay);
-  setTimeout(function(){ document.getElementById('pin-input-field').focus(); }, 100);
+  setTimeout(function(){ document.getElementById('pin-input-field').focus(); },100);
 };
-
 window.checkPin = function() {
-  var val = document.getElementById('pin-input-field').value;
-  if (val === PARENT_PIN) {
+  var val=document.getElementById('pin-input-field').value;
+  if (val===PARENT_PIN) {
     document.getElementById('pin-overlay').remove();
     openParentDashboard();
   } else {
-    document.getElementById('pin-error').textContent = '❌ 密碼錯誤，請再試';
-    document.getElementById('pin-input-field').value = '';
+    document.getElementById('pin-error').textContent='❌ 密碼錯誤，請再試';
+    document.getElementById('pin-input-field').value='';
   }
 };
-
 async function openParentDashboard() {
   showLoading('載入管理後台...');
   await loadWordLibrary();
@@ -923,17 +988,15 @@ async function openParentDashboard() {
 
 // ====== START GAME ======
 window.startGame = async function() {
-  var input = document.getElementById('wordInput').value.trim();
+  var input=document.getElementById('wordInput').value.trim();
   if (!input) { alert('請先輸入中文字！'); return; }
-  var newWords = parseInput(input);
-  if (newWords.length === 0) { alert('請輸入有效的中文字！'); return; }
+  var newWords=parseInput(input);
+  if (newWords.length===0) { alert('請輸入有效的中文字！'); return; }
   showLoading('儲存字庫到雲端...');
-  for (var i=0; i<newWords.length; i++) {
-    await addWordToLibrary(newWords[i], '一般');
-  }
+  for (var i=0;i<newWords.length;i++) { await addWordToLibrary(newWords[i],'一般'); }
   await loadWordLibrary();
   await loadPlayerStats(currentPlayer);
-  allWords = selectSmartWords(fullWordLibrary, wordStatsMap, 100);
+  allWords=selectSmartWords(fullWordLibrary,wordStatsMap,100);
   hideLoading();
   startGameDirect();
 };
@@ -941,11 +1004,11 @@ window.startGame = async function() {
 function startGameDirect() {
   knownWords=[]; undoStack=[]; collectedItems=[];
   currentSceneIndex=0; lastMilestone=-1;
-  sessionStartTime = Date.now();
-  document.getElementById('badge-emoji').textContent  = charEmoji[currentPlayer];
-  document.getElementById('badge-name').textContent   = charNames[currentPlayer];
-  document.getElementById('char-sprite').textContent  = charEmoji[currentPlayer];
-  document.getElementById('btn-undo').style.display   = 'none';
+  sessionStartTime=Date.now();
+  document.getElementById('badge-emoji').textContent =charEmoji[currentPlayer];
+  document.getElementById('badge-name').textContent  =charNames[currentPlayer];
+  document.getElementById('char-sprite').textContent =charEmoji[currentPlayer];
+  document.getElementById('btn-undo').style.display  ='none';
   setDialogue(pickRandom(dialogues.start));
   buildGameCards();
   updateScene(true);
@@ -953,80 +1016,101 @@ function startGameDirect() {
   updateCollectiblesDisplay();
   setBodyScene(scenes[0].bg);
   showPage('page-game');
+
+  // 預熱語音引擎（靜音）
+  if (window.speechSynthesis) {
+    var warmup=new SpeechSynthesisUtterance(' ');
+    warmup.volume=0;
+    warmup.lang='zh-HK';
+    window.speechSynthesis.speak(warmup);
+  }
 }
 
-// ====== BUILD CARDS ======
+// ====== BUILD CARDS (含新徽章) ======
 function buildGameCards() {
-  var area = document.getElementById('cards-area');
-  area.innerHTML = '';
-  var words = shuffle(allWords);
-  for (var i=0; i<words.length; i++) {
-    (function(word, idx){
-      var stats = wordStatsMap[word];
-      var isWeak = stats && stats.shown>0 && (stats.success/stats.shown)<0.5;
-      var card = document.createElement('div');
-      card.className = 'card';
-      card.textContent = word;
-      card.setAttribute('data-word', word);
-      card.style.background = cardColors[idx % cardColors.length];
-      card.style.animationDelay = (idx*0.06) + 's';
+  var area=document.getElementById('cards-area');
+  area.innerHTML='';
+  var words=shuffle(allWords);
+  for (var i=0;i<words.length;i++) {
+    (function(word,idx){
+      var stats=wordStatsMap[word];
+      var card=document.createElement('div');
+      card.className='card';
+      card.textContent=word;
+      card.setAttribute('data-word',word);
+      card.style.background=cardColors[idx%cardColors.length];
+      card.style.animationDelay=(idx*0.06)+'s';
       if (word.length===2) card.classList.add('multi-char');
       else if (word.length>=3) card.classList.add('long-char');
-      if (isWeak) {
-        var badge = document.createElement('div');
-        badge.className = 'weak-badge';
-        badge.textContent = '!';
-        card.appendChild(badge);
+
+      // ====== 新徽章邏輯 ======
+      var badge=document.createElement('div');
+      badge.className='word-badge';
+      if (!stats||stats.shown===0) {
+        // 第一次見：太陽
+        badge.textContent='\u2600\uFE0F';
+        badge.title='新字！';
+      } else if ((stats.success/stats.shown)>=0.5) {
+        // 答對率 >= 50%：星星
+        badge.textContent='\u2B50';
+        badge.title='做得好！';
+      } else {
+        // 答對率 < 50%：加油
+        badge.textContent='\u{1F4AA}';
+        badge.title='加油！';
       }
-      card.addEventListener('click', function(){ onCardClick(card, word); });
+      card.appendChild(badge);
+
+      card.addEventListener('click',function(){ onCardClick(card,word); });
       area.appendChild(card);
-    })(words[i], i);
+    })(words[i],i);
   }
 }
 
 // ====== CARD CLICK ======
 function onCardClick(card, word) {
   if (card.classList.contains('removing')) return;
-  var rect = card.getBoundingClientRect();
-  var cx = rect.left + rect.width/2;
-  var cy = rect.top + rect.height/2;
+  var rect=card.getBoundingClientRect();
+  var cx=rect.left+rect.width/2;
+  var cy=rect.top+rect.height/2;
   knownWords.push(word);
-  undoStack.push({word:word, card:card});
+  undoStack.push({word:word,card:card});
   playHappySound();
-  createSparkles(cx, cy);
-  createFloatingEmoji(cx, cy);
+  speakWord(word);   // 點字卡發音
+  createSparkles(cx,cy);
+  createFloatingEmoji(cx,cy);
   addCollectible();
-  var sprite = document.getElementById('char-sprite');
+  var sprite=document.getElementById('char-sprite');
   sprite.classList.remove('jump');
   void sprite.offsetWidth;
   sprite.classList.add('jump');
   if (Math.random()<0.4) setDialogue(pickRandom(dialogues.found));
   card.classList.add('removing');
   setTimeout(function(){
-    card.style.display = 'none';
+    card.style.display='none';
     updateProgress();
     updateScene(false);
-    if (knownWords.length === allWords.length) {
-      setTimeout(showAllDoneCelebration, 400);
+    if (knownWords.length===allWords.length) {
+      setTimeout(showAllDoneCelebration,400);
     }
-  }, 600);
-  document.getElementById('btn-undo').style.display = 'inline-flex';
+  },600);
+  document.getElementById('btn-undo').style.display='inline-flex';
 }
 
 // ====== UNDO ======
 window.undoLast = function() {
   if (undoStack.length===0) return;
-  var last = undoStack.pop();
-  var idx = knownWords.lastIndexOf(last.word);
+  var last=undoStack.pop();
+  var idx=knownWords.lastIndexOf(last.word);
   if (idx!==-1) knownWords.splice(idx,1);
   if (collectedItems.length>0) collectedItems.pop();
   updateCollectiblesDisplay();
-  var card = last.card;
-  card.style.display = 'flex';
+  var card=last.card;
+  card.style.display='flex';
   card.classList.remove('removing');
-  card.style.animation = 'none';
+  card.style.animation='none';
   void card.offsetWidth;
-  card.style.animation = 'cardAppear 0.4s ease';
+  card.style.animation='cardAppear 0.4s ease';
   updateProgress();
   updateScene(false);
   if (undoStack.length===0) document.getElementById('btn-undo').style.display='none';
@@ -1034,7 +1118,7 @@ window.undoLast = function() {
 
 // ====== SCENE ======
 function getSceneIndex() {
-  var pct = allWords.length>0 ? (knownWords.length/allWords.length*100) : 0;
+  var pct=allWords.length>0?(knownWords.length/allWords.length*100):0;
   if (pct>=100) return 5;
   if (pct>=76)  return 4;
   if (pct>=51)  return 3;
@@ -1042,104 +1126,99 @@ function getSceneIndex() {
   if (pct>=1)   return 1;
   return 0;
 }
-
 function updateScene(isInit) {
-  var newIndex = getSceneIndex();
-  var changed = newIndex !== currentSceneIndex;
-  currentSceneIndex = newIndex;
-  var scene = scenes[currentSceneIndex];
+  var newIndex=getSceneIndex();
+  var changed=newIndex!==currentSceneIndex;
+  currentSceneIndex=newIndex;
+  var scene=scenes[currentSceneIndex];
   setBodyScene(scene.bg);
-  document.getElementById('scene-icon-display').textContent = scene.icon;
-  document.getElementById('scene-name-display').textContent = scene.name;
-  document.getElementById('scene-sky-display').textContent  = scene.sky;
-  for (var i=0; i<=5; i++) {
-    var stop  = document.getElementById('stop-'+i);
-    var label = document.getElementById('label-'+i);
+  document.getElementById('scene-icon-display').textContent=scene.icon;
+  document.getElementById('scene-name-display').textContent=scene.name;
+  document.getElementById('scene-sky-display').textContent =scene.sky;
+  for (var i=0;i<=5;i++) {
+    var stop =document.getElementById('stop-'+i);
+    var label=document.getElementById('label-'+i);
     stop.classList.remove('active','done');
     label.classList.remove('active','done');
-    if (i<currentSceneIndex)       { stop.classList.add('done');   label.classList.add('done'); }
-    else if (i===currentSceneIndex){ stop.classList.add('active'); label.classList.add('active'); }
+    if (i<currentSceneIndex)        { stop.classList.add('done');   label.classList.add('done'); }
+    else if (i===currentSceneIndex) { stop.classList.add('active'); label.classList.add('active'); }
   }
-  for (var j=0; j<5; j++) {
-    var line = document.getElementById('line-'+j);
+  for (var j=0;j<5;j++) {
+    var line=document.getElementById('line-'+j);
     if (j<currentSceneIndex) line.classList.add('done');
     else line.classList.remove('done');
   }
-  if (changed && !isInit && currentSceneIndex>0 && currentSceneIndex!==lastMilestone) {
-    lastMilestone = currentSceneIndex;
+  if (changed&&!isInit&&currentSceneIndex>0&&currentSceneIndex!==lastMilestone) {
+    lastMilestone=currentSceneIndex;
     playMilestoneSound();
-    var keys = ['start','park','shop','school','fun','castle'];
-    var key = keys[currentSceneIndex];
+    var keys=['start','park','shop','school','fun','castle'];
+    var key=keys[currentSceneIndex];
     if (dialogues[key]) setDialogue(pickRandom(dialogues[key]));
     if (currentSceneIndex<5) showMilestonePopup(scene);
   }
 }
-
 function showMilestonePopup(scene) {
-  var popup = document.createElement('div');
-  popup.className = 'milestone-popup';
-  popup.innerHTML =
-    '<div style="font-size:60px;margin-bottom:10px;">' + scene.icon + '</div>' +
-    '<div style="font-size:24px;font-weight:bold;color:#333;margin-bottom:8px;">到達 ' + scene.name + '！</div>' +
-    '<div style="font-size:18px;color:#888;">太棒了！繼續冒險吧！' + scene.sky + '</div>';
+  var popup=document.createElement('div');
+  popup.className='milestone-popup';
+  popup.innerHTML=
+    '<div style="font-size:60px;margin-bottom:10px;">'+scene.icon+'</div>'+
+    '<div style="font-size:24px;font-weight:bold;color:#333;margin-bottom:8px;">到達 '+scene.name+'！</div>'+
+    '<div style="font-size:18px;color:#888;">太棒了！繼續冒險吧！'+scene.sky+'</div>';
   document.body.appendChild(popup);
   createConfetti();
   setTimeout(function(){
     popup.style.transition='all 0.5s';
     popup.style.opacity='0';
     popup.style.transform='translate(-50%,-50%) scale(0.5)';
-    setTimeout(function(){ popup.remove(); }, 500);
-  }, 1800);
+    setTimeout(function(){ popup.remove(); },500);
+  },1800);
 }
 
 // ====== COLLECTIBLES ======
 function addCollectible() {
-  var item = pickRandom(scenes[currentSceneIndex].items);
+  var item=pickRandom(scenes[currentSceneIndex].items);
   collectedItems.push(item);
   updateCollectiblesDisplay();
 }
-
 function updateCollectiblesDisplay() {
-  var bar = document.getElementById('collectibles-bar');
-  var start = Math.max(0, collectedItems.length-15);
-  var html = '';
-  var slice = collectedItems.slice(start);
-  for (var i=0; i<slice.length; i++) {
-    var isNew = (i === slice.length-1);
-    html += '<span class="collectible-item"' + (isNew?' style="animation:collectPop 0.5s ease;"':'') + '>' + slice[i] + '</span>';
+  var bar=document.getElementById('collectibles-bar');
+  var start=Math.max(0,collectedItems.length-15);
+  var html='';
+  var slice=collectedItems.slice(start);
+  for (var i=0;i<slice.length;i++) {
+    var isNew=(i===slice.length-1);
+    html+='<span class="collectible-item"'+(isNew?' style="animation:collectPop 0.5s ease;"':'')+'>'+slice[i]+'</span>';
   }
-  bar.innerHTML = html;
+  bar.innerHTML=html;
 }
-
 function setDialogue(text) {
-  var bubble = document.getElementById('dialogue-bubble');
+  var bubble=document.getElementById('dialogue-bubble');
   bubble.style.animation='none';
   void bubble.offsetWidth;
   bubble.style.animation='bubblePop 0.4s ease';
-  bubble.textContent = text;
+  bubble.textContent=text;
 }
-
 function updateProgress() {
-  var pct = allWords.length>0 ? (knownWords.length/allWords.length*100) : 0;
-  document.getElementById('progress-fill').style.width = pct+'%';
-  document.getElementById('progress-text').textContent = knownWords.length + ' / ' + allWords.length;
+  var pct=allWords.length>0?(knownWords.length/allWords.length*100):0;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-text').textContent=knownWords.length+' / '+allWords.length;
 }
 
 // ====== CONFIRM FINISH ======
 window.showConfirmFinish = function() {
-  var remaining = allWords.length - knownWords.length;
+  var remaining=allWords.length-knownWords.length;
   if (remaining===0) { finishGame(); return; }
-  var overlay = document.createElement('div');
-  overlay.className = 'celebration';
-  overlay.id = 'confirm-overlay';
-  overlay.innerHTML =
-    '<div class="celebration-content">' +
-    '<div style="font-size:50px;margin-bottom:10px;">&#127937;</div>' +
-    '<h2 style="font-size:24px;color:#333;margin-bottom:10px;">結束今天的冒險？</h2>' +
-    '<p style="font-size:16px;color:#888;margin-bottom:20px;">還有 <b style="color:#ff6b6b;">' + remaining + '</b> 個文字未找到，<br>將會標記為「還藏在城市裡」。</p>' +
-    '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
-    '<button class="btn btn-sm" style="background:linear-gradient(135deg,#48c774,#36d1dc);color:white;" onclick="document.getElementById(\'confirm-overlay\').remove();finishGame();">&#9989; 結束冒險</button>' +
-    '<button class="btn btn-sm" style="background:linear-gradient(135deg,#aaa,#888);color:white;" onclick="document.getElementById(\'confirm-overlay\').remove();">&#8617;&#65039; 繼續冒險</button>' +
+  var overlay=document.createElement('div');
+  overlay.className='celebration';
+  overlay.id='confirm-overlay';
+  overlay.innerHTML=
+    '<div class="celebration-content">'+
+    '<div style="font-size:50px;margin-bottom:10px;">&#127937;</div>'+
+    '<h2 style="font-size:24px;color:#333;margin-bottom:10px;">結束今天的冒險？</h2>'+
+    '<p style="font-size:16px;color:#888;margin-bottom:20px;">還有 <b style="color:#ff6b6b;">'+remaining+'</b> 個文字未找到，<br>將會標記為「還藏在城市裡」。</p>'+
+    '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">'+
+    '<button class="btn btn-sm" style="background:linear-gradient(135deg,#48c774,#36d1dc);color:white;" onclick="document.getElementById(\'confirm-overlay\').remove();finishGame();">&#9989; 結束冒險</button>'+
+    '<button class="btn btn-sm" style="background:linear-gradient(135deg,#aaa,#888);color:white;" onclick="document.getElementById(\'confirm-overlay\').remove();">&#8617;&#65039; 繼續冒險</button>'+
     '</div></div>';
   document.body.appendChild(overlay);
 };
@@ -1149,106 +1228,126 @@ function showAllDoneCelebration() {
   playCelebrationSound();
   createConfetti();
   setDialogue(pickRandom(dialogues.castle));
-  var name = charNames[currentPlayer];
-  var overlay = document.createElement('div');
-  overlay.className = 'celebration';
-  overlay.innerHTML =
-    '<div class="celebration-content">' +
-    '<div style="font-size:70px;margin-bottom:10px;">&#127881;&#127984;&#127881;</div>' +
-    '<h2 style="font-size:28px;color:#333;margin-bottom:8px;">城市英雄 ' + name + '！</h2>' +
-    '<p style="font-size:20px;color:#666;margin-bottom:8px;">所有文字都找回來了！</p>' +
-    '<p style="font-size:18px;color:#888;margin-bottom:20px;">城市恢復正常了！你真厲害！&#127961;&#65039;&#10024;</p>' +
-    '<button class="btn btn-again" onclick="this.closest(\'.celebration\').remove();finishGame();">&#128212; 查看冒險日記</button>' +
+  var name=charNames[currentPlayer];
+  var overlay=document.createElement('div');
+  overlay.className='celebration';
+  overlay.innerHTML=
+    '<div class="celebration-content">'+
+    '<div style="font-size:70px;margin-bottom:10px;">&#127881;&#127984;&#127881;</div>'+
+    '<h2 style="font-size:28px;color:#333;margin-bottom:8px;">城市英雄 '+name+'！</h2>'+
+    '<p style="font-size:20px;color:#666;margin-bottom:8px;">所有文字都找回來了！</p>'+
+    '<p style="font-size:18px;color:#888;margin-bottom:20px;">城市恢復正常了！你真厲害！&#127961;&#65039;&#10024;</p>'+
+    '<button class="btn btn-again" onclick="this.closest(\'.celebration\').remove();finishGame();">&#128212; 查看冒險日記</button>'+
     '</div>';
   document.body.appendChild(overlay);
 }
 
 // ====== FINISH & SAVE ======
 window.finishGame = async function() {
-  document.querySelectorAll('.celebration, .milestone-popup').forEach(function(e){ e.remove(); });
+  document.querySelectorAll('.celebration,.milestone-popup').forEach(function(e){ e.remove(); });
   showLoading('儲存冒險記錄...');
-  var knownSet = {};
+  var knownSet={};
   knownWords.forEach(function(w){ knownSet[w]=true; });
-  var unknownList = allWords.filter(function(w){ return !knownSet[w]; });
-  var savePromises = [];
-  for (var i=0; i<knownWords.length; i++)  savePromises.push(saveWordResult(currentPlayer, knownWords[i], true));
-  for (var j=0; j<unknownList.length; j++) savePromises.push(saveWordResult(currentPlayer, unknownList[j], false));
+  var unknownList=allWords.filter(function(w){ return !knownSet[w]; });
+  var savePromises=[];
+  for (var i=0;i<knownWords.length;i++)  savePromises.push(saveWordResult(currentPlayer,knownWords[i],true));
+  for (var j=0;j<unknownList.length;j++) savePromises.push(saveWordResult(currentPlayer,unknownList[j],false));
   await Promise.all(savePromises);
-  await saveSession(currentPlayer, allWords.length, knownWords.length, unknownList);
-  var summary = await getPlayerSummary(currentPlayer);
+  await saveSession(currentPlayer,allWords.length,knownWords.length,unknownList);
+  var summary=await getPlayerSummary(currentPlayer);
   hideLoading();
-  renderReport(knownWords, unknownList, summary);
+  renderReport(knownWords,unknownList,summary);
 };
 
-// ====== RENDER REPORT ======
+// ====== RENDER REPORT (含點擊發音) ======
 function renderReport(knownList, unknownList, summary) {
   setBodyScene('scene-report');
-  var total = allWords.length;
-  var pct = total>0 ? Math.round(knownList.length/total*100) : 0;
+  var total=allWords.length;
+  var pct=total>0?Math.round(knownList.length/total*100):0;
 
-  document.getElementById('report-name').textContent    = charNames[currentPlayer] + ' 的冒險';
-  document.getElementById('stat-total').textContent     = total;
-  document.getElementById('stat-known').textContent     = knownList.length;
-  document.getElementById('stat-unknown').textContent   = unknownList.length;
+  document.getElementById('report-name').textContent   =charNames[currentPlayer]+' 的冒險';
+  document.getElementById('stat-total').textContent    =total;
+  document.getElementById('stat-known').textContent    =knownList.length;
+  document.getElementById('stat-unknown').textContent  =unknownList.length;
 
-  var scoreBar = document.getElementById('score-bar-fill');
+  var scoreBar=document.getElementById('score-bar-fill');
   scoreBar.style.width='0%'; scoreBar.textContent='';
-  scoreBar.style.background = pct>=80
+  scoreBar.style.background=pct>=80
     ? 'linear-gradient(90deg,#48c774,#36d1dc)'
     : pct>=50 ? 'linear-gradient(90deg,#ffa500,#fdcb6e)'
     : 'linear-gradient(90deg,#ff6b6b,#ffa500)';
-  setTimeout(function(){ scoreBar.style.width=pct+'%'; scoreBar.textContent=pct+'%'; }, 100);
+  setTimeout(function(){ scoreBar.style.width=pct+'%'; scoreBar.textContent=pct+'%'; },100);
 
   // Route
-  var stopIcons = ['\u{1F3E0}','\u{1F333}','\u{1F3EA}','\u{1F3EB}','\u{1F3A1}','\u{1F3F0}'];
-  var reached = getSceneIndex();
-  var routeHtml = '';
-  for (var s=0; s<stopIcons.length; s++) {
-    var cls = s<reached ? 'done' : s===reached ? 'current' : '';
-    var lineCls = s<reached ? 'done' : '';
-    routeHtml += '<div class="rr-stop ' + cls + '">' + stopIcons[s] + '</div>';
-    if (s<5) routeHtml += '<div class="rr-line ' + lineCls + '"></div>';
+  var stopIcons=['\u{1F3E0}','\u{1F333}','\u{1F3EA}','\u{1F3EB}','\u{1F3A1}','\u{1F3F0}'];
+  var reached=getSceneIndex();
+  var routeHtml='';
+  for (var s=0;s<stopIcons.length;s++) {
+    var cls=s<reached?'done':s===reached?'current':'';
+    var lineCls=s<reached?'done':'';
+    routeHtml+='<div class="rr-stop '+cls+'">'+stopIcons[s]+'</div>';
+    if (s<5) routeHtml+='<div class="rr-line '+lineCls+'"></div>';
   }
-  document.getElementById('report-route').innerHTML = routeHtml;
+  document.getElementById('report-route').innerHTML=routeHtml;
 
-  var msgs = [
+  var msgs=[
     '&#127807; 好的開始！下次會找到更多的！',
     '&#128170; 加油！繼續練習！',
     '&#128170; 好棒！已經找回一半的文字了！',
     '&#127775; 超級厲害！城市幾乎恢復了！',
     '&#127942; 城市英雄！所有文字都找回來了！'
   ];
-  document.getElementById('report-message').innerHTML =
-    pct>=100 ? msgs[4] : pct>=80 ? msgs[3] : pct>=50 ? msgs[2] : pct>=25 ? msgs[1] : msgs[0];
+  document.getElementById('report-message').innerHTML=
+    pct>=100?msgs[4]:pct>=80?msgs[3]:pct>=50?msgs[2]:pct>=25?msgs[1]:msgs[0];
 
-  document.getElementById('cum-player-name').textContent = charNames[currentPlayer];
-  document.getElementById('cum-total').textContent    = fullWordLibrary.length + ' 個字';
-  document.getElementById('cum-known').textContent    = summary.knownCount + ' 個字';
-  document.getElementById('cum-sessions').textContent = summary.sessions + ' 次';
-  document.getElementById('cum-today').textContent    = '+' + knownList.length + ' 個字';
+  document.getElementById('cum-player-name').textContent=charNames[currentPlayer];
+  document.getElementById('cum-total').textContent   =fullWordLibrary.length+' 個字';
+  document.getElementById('cum-known').textContent   =summary.knownCount+' 個字';
+  document.getElementById('cum-sessions').textContent=summary.sessions+' 次';
+  document.getElementById('cum-today').textContent   ='+'+knownList.length+' 個字';
 
-  document.getElementById('collected-items-display').innerHTML =
-    collectedItems.length>0 ? collectedItems.join('') : '<span style="color:#ccc">還沒有收集到寶物</span>';
+  document.getElementById('collected-items-display').innerHTML=
+    collectedItems.length>0?collectedItems.join(''):'<span style="color:#ccc">還沒有收集到寶物</span>';
 
-  var knownHtml = '';
-  if (knownList.length===0) knownHtml='<p class="empty-message">（還沒有找到文字）</p>';
-  else for (var k=0; k<knownList.length; k++) knownHtml+='<span class="report-word known">'+knownList[k]+'</span>';
-  document.getElementById('known-words').innerHTML = knownHtml;
+  // ====== 認識的字（可點擊發音）======
+  var knownHtml='';
+  if (knownList.length===0) {
+    knownHtml='<p class="empty-message">（還沒有找到文字）</p>';
+  } else {
+    for (var k=0;k<knownList.length;k++) {
+      knownHtml+=
+        '<span class="report-word known" onclick="speakWord(\''+knownList[k]+'\')" title="點我發音">'+
+        knownList[k]+
+        ' <span class="sound-icon">&#128263;</span>'+
+        '</span>';
+    }
+  }
+  document.getElementById('known-words').innerHTML=knownHtml;
 
-  var unknownHtml = '';
-  if (unknownList.length===0) unknownHtml='<p class="empty-message">（全部都找回來了！&#127881;）</p>';
-  else for (var u=0; u<unknownList.length; u++) unknownHtml+='<span class="report-word unknown">'+unknownList[u]+'</span>';
-  document.getElementById('unknown-words').innerHTML = unknownHtml;
+  // ====== 不認識的字（可點擊發音）======
+  var unknownHtml='';
+  if (unknownList.length===0) {
+    unknownHtml='<p class="empty-message">（全部都找回來了！&#127881;）</p>';
+  } else {
+    for (var u=0;u<unknownList.length;u++) {
+      unknownHtml+=
+        '<span class="report-word unknown" onclick="speakWord(\''+unknownList[u]+'\')" title="點我發音">'+
+        unknownList[u]+
+        ' <span class="sound-icon">&#128263;</span>'+
+        '</span>';
+    }
+  }
+  document.getElementById('unknown-words').innerHTML=unknownHtml;
 
   showPage('page-report');
-  if (pct>=80) setTimeout(createConfetti, 500);
+  if (pct>=80) setTimeout(createConfetti,500);
 }
 
 // ====== REPLAY / BACK ======
 window.replayGame = async function() {
   showLoading('重新準備字卡...');
   await loadPlayerStats(currentPlayer);
-  allWords = selectSmartWords(fullWordLibrary, wordStatsMap, 100);
+  allWords=selectSmartWords(fullWordLibrary,wordStatsMap,100);
   hideLoading();
   knownWords=[]; undoStack=[]; collectedItems=[];
   currentSceneIndex=0; lastMilestone=-1;
@@ -1261,94 +1360,87 @@ window.replayGame = async function() {
   updateCollectiblesDisplay();
   showPage('page-game');
 };
-
 window.backToPlayerSelect = async function() {
   showLoading('返回主頁...');
   await loadWordLibrary();
-  var hSummary = await getPlayerSummary('hayden');
-  var cSummary = await getPlayerSummary('celine');
-  updatePlayerPreviews(hSummary, cSummary);
+  var hSummary=await getPlayerSummary('hayden');
+  var cSummary=await getPlayerSummary('celine');
+  updatePlayerPreviews(hSummary,cSummary);
   hideLoading();
   setBodyScene('scene-player');
   showPage('page-player');
 };
 
 // ====== PARENT DASHBOARD ======
-window.switchTab = function(tabId, btn) {
+window.switchTab = function(tabId,btn) {
   document.querySelectorAll('.tab-content').forEach(function(t){ t.classList.remove('active'); });
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById(tabId).classList.add('active');
   if (btn) btn.classList.add('active');
 };
-
 function renderWordChips() {
-  var container = document.getElementById('word-chips-display');
-  document.getElementById('total-word-count').textContent = fullWordLibrary.length;
+  var container=document.getElementById('word-chips-display');
+  document.getElementById('total-word-count').textContent=fullWordLibrary.length;
   if (fullWordLibrary.length===0) {
     container.innerHTML='<p style="color:#bbb;font-size:14px;">字庫為空，請新增字詞</p>';
     return;
   }
   var html='';
-  for (var i=0; i<fullWordLibrary.length; i++) {
-    var item = fullWordLibrary[i];
-    html += '<div class="word-chip">' + item.word +
-      '<button class="chip-delete" onclick="removeWord(\'' + item.id + '\',this)" title="刪除">&#10005;</button>' +
+  for (var i=0;i<fullWordLibrary.length;i++) {
+    var item=fullWordLibrary[i];
+    html+='<div class="word-chip">'+item.word+
+      '<button class="chip-delete" onclick="removeWord(\''+item.id+'\',this)" title="刪除">&#10005;</button>'+
       '</div>';
   }
-  container.innerHTML = html;
+  container.innerHTML=html;
 }
-
-window.removeWord = async function(docId, btn) {
+window.removeWord = async function(docId,btn) {
   if (!confirm('確定要刪除這個字嗎？')) return;
   await deleteWordFromLibrary(docId);
   await loadWordLibrary();
   renderWordChips();
 };
-
 window.addWordsToLibrary = async function() {
-  var input = document.getElementById('newWordsInput').value.trim();
+  var input=document.getElementById('newWordsInput').value.trim();
   if (!input) { alert('請輸入字詞！'); return; }
-  var words = parseInput(input);
-  var category = document.getElementById('word-category').value;
+  var words=parseInput(input);
+  var category=document.getElementById('word-category').value;
   showLoading('新增字詞中...');
   var added=0;
-  for (var i=0; i<words.length; i++) {
-    var ok = await addWordToLibrary(words[i], category);
+  for (var i=0;i<words.length;i++) {
+    var ok=await addWordToLibrary(words[i],category);
     if (ok) added++;
   }
   await loadWordLibrary();
   hideLoading();
   document.getElementById('newWordsInput').value='';
   renderWordChips();
-  alert('成功新增 ' + added + ' 個字，' + (words.length-added) + ' 個字已存在');
+  alert('成功新增 '+added+' 個字，'+(words.length-added)+' 個字已存在');
 };
-
 async function loadParentStats() {
-  var hStats = await loadPlayerStatsForParent('hayden');
-  var cStats = await loadPlayerStatsForParent('celine');
-  var hSummary = await getPlayerSummary('hayden');
-  var cSummary = await getPlayerSummary('celine');
-  document.getElementById('p-hayden-known').textContent    = hSummary.knownCount + ' 個字';
-  document.getElementById('p-hayden-sessions').textContent = hSummary.sessions + ' 次';
-  document.getElementById('p-hayden-rate').textContent     = hSummary.avgRate + '%';
-  document.getElementById('p-celine-known').textContent    = cSummary.knownCount + ' 個字';
-  document.getElementById('p-celine-sessions').textContent = cSummary.sessions + ' 次';
-  document.getElementById('p-celine-rate').textContent     = cSummary.avgRate + '%';
-  renderWeakWords('hayden-weak-words', hStats);
-  renderWeakWords('celine-weak-words', cStats);
+  var hStats=await loadPlayerStatsForParent('hayden');
+  var cStats=await loadPlayerStatsForParent('celine');
+  var hSummary=await getPlayerSummary('hayden');
+  var cSummary=await getPlayerSummary('celine');
+  document.getElementById('p-hayden-known').textContent    =hSummary.knownCount+' 個字';
+  document.getElementById('p-hayden-sessions').textContent =hSummary.sessions+' 次';
+  document.getElementById('p-hayden-rate').textContent     =hSummary.avgRate+'%';
+  document.getElementById('p-celine-known').textContent    =cSummary.knownCount+' 個字';
+  document.getElementById('p-celine-sessions').textContent =cSummary.sessions+' 次';
+  document.getElementById('p-celine-rate').textContent     =cSummary.avgRate+'%';
+  renderWeakWords('hayden-weak-words',hStats);
+  renderWeakWords('celine-weak-words',cStats);
   await loadSessions();
 }
-
 async function loadPlayerStatsForParent(player) {
-  var snap = await getDocs(collection(db,'players',player,'wordStats'));
+  var snap=await getDocs(collection(db,'players',player,'wordStats'));
   var stats=[];
   snap.forEach(function(d){ stats.push(d.data()); });
   return stats;
 }
-
 function renderWeakWords(containerId, stats) {
-  var container = document.getElementById(containerId);
-  var weak = stats
+  var container=document.getElementById(containerId);
+  var weak=stats
     .filter(function(s){ return s.shown>=2; })
     .map(function(s){ return Object.assign({},s,{rate:s.success/s.shown}); })
     .sort(function(a,b){ return a.rate-b.rate; })
@@ -1358,25 +1450,24 @@ function renderWeakWords(containerId, stats) {
     return;
   }
   var html='';
-  for (var i=0; i<weak.length; i++) {
-    var s = weak[i];
-    var pct = Math.round(s.rate*100);
-    var barColor = pct<30 ? '#ff6b6b' : pct<60 ? '#ffa500' : '#48c774';
-    html +=
-      '<div class="weak-word-item">' +
-      '<span class="weak-word-char">' + s.word + '</span>' +
-      '<div class="weak-word-bar-container"><div class="weak-word-bar" style="width:' + pct + '%;background:' + barColor + ';"></div></div>' +
-      '<span class="weak-word-pct">' + pct + '%</span>' +
+  for (var i=0;i<weak.length;i++) {
+    var s=weak[i];
+    var pct=Math.round(s.rate*100);
+    var barColor=pct<30?'#ff6b6b':pct<60?'#ffa500':'#48c774';
+    html+=
+      '<div class="weak-word-item">'+
+      '<span class="weak-word-char">'+s.word+'</span>'+
+      '<div class="weak-word-bar-container"><div class="weak-word-bar" style="width:'+pct+'%;background:'+barColor+';"></div></div>'+
+      '<span class="weak-word-pct">'+pct+'%</span>'+
       '</div>';
   }
-  container.innerHTML = html;
+  container.innerHTML=html;
 }
-
 async function loadSessions() {
-  var container = document.getElementById('sessions-list');
+  var container=document.getElementById('sessions-list');
   try {
-    var hSnap = await getDocs(query(collection(db,'players','hayden','sessions'),orderBy('date','desc'),limit(10)));
-    var cSnap = await getDocs(query(collection(db,'players','celine','sessions'),orderBy('date','desc'),limit(10)));
+    var hSnap=await getDocs(query(collection(db,'players','hayden','sessions'),orderBy('date','desc'),limit(10)));
+    var cSnap=await getDocs(query(collection(db,'players','celine','sessions'),orderBy('date','desc'),limit(10)));
     var sessions=[];
     hSnap.forEach(function(d){ sessions.push(Object.assign({player:'hayden'},d.data())); });
     cSnap.forEach(function(d){ sessions.push(Object.assign({player:'celine'},d.data())); });
@@ -1386,24 +1477,24 @@ async function loadSessions() {
       return;
     }
     var html='';
-    var list = sessions.slice(0,15);
-    for (var i=0; i<list.length; i++) {
-      var s = list[i];
-      var d = s.date ? new Date(s.date.seconds*1000) : new Date();
-      var dateStr = (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
-      var pct = s.percentage||0;
-      var pctColor = pct>=80?'#48c774':pct>=50?'#ffa500':'#ff6b6b';
-      var emoji = s.player==='hayden'?'&#128102;':'&#128103;';
-      var name  = s.player==='hayden'?'Hayden':'Celine';
-      html +=
-        '<div class="session-item">' +
-        '<span class="session-date">' + dateStr + '</span>' +
-        '<span class="session-player">' + emoji + ' ' + name + '</span>' +
-        '<span class="session-score">' + s.known + '/' + s.played + ' 字</span>' +
-        '<span class="session-pct" style="background:' + pctColor + '">' + pct + '%</span>' +
+    var list=sessions.slice(0,15);
+    for (var i=0;i<list.length;i++) {
+      var s=list[i];
+      var d=s.date?new Date(s.date.seconds*1000):new Date();
+      var dateStr=(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
+      var pct=s.percentage||0;
+      var pctColor=pct>=80?'#48c774':pct>=50?'#ffa500':'#ff6b6b';
+      var emoji=s.player==='hayden'?'&#128102;':'&#128103;';
+      var name=s.player==='hayden'?'Hayden':'Celine';
+      html+=
+        '<div class="session-item">'+
+        '<span class="session-date">'+dateStr+'</span>'+
+        '<span class="session-player">'+emoji+' '+name+'</span>'+
+        '<span class="session-score">'+s.known+'/'+s.played+' 字</span>'+
+        '<span class="session-pct" style="background:'+pctColor+'">'+pct+'%</span>'+
         '</div>';
     }
-    container.innerHTML = html;
+    container.innerHTML=html;
   } catch(e) {
     container.innerHTML='<p style="color:#bbb;font-size:14px;">載入失敗，請重試</p>';
   }
@@ -1411,30 +1502,28 @@ async function loadSessions() {
 
 // ====== RESET ======
 async function deleteSubCollection(player, subCol) {
-  var snap = await getDocs(collection(db,'players',player,subCol));
-  var batch = writeBatch(db);
+  var snap=await getDocs(collection(db,'players',player,subCol));
+  var batch=writeBatch(db);
   snap.forEach(function(d){ batch.delete(d.ref); });
   if (!snap.empty) await batch.commit();
 }
-
 window.resetPlayerData = async function(player) {
-  var name = player==='hayden'?'Hayden':'Celine';
-  if (!confirm('确定要清除 ' + name + ' 的所有學習記錄嗎？\n此操作無法復原！')) return;
-  showLoading('重設 ' + name + ' 的數據中...');
+  var name=player==='hayden'?'Hayden':'Celine';
+  if (!confirm('確定要清除 '+name+' 的所有學習記錄嗎？\n此操作無法復原！')) return;
+  showLoading('重設 '+name+' 的數據中...');
   try {
     await deleteSubCollection(player,'wordStats');
     await deleteSubCollection(player,'sessions');
     hideLoading();
-    document.getElementById('reset-status').textContent = name + ' 的數據已成功重設！';
+    document.getElementById('reset-status').textContent=name+' 的數據已成功重設！';
     await loadParentStats();
   } catch(e) {
     hideLoading();
-    document.getElementById('reset-status').textContent = '重設失敗：' + e.message;
+    document.getElementById('reset-status').textContent='重設失敗：'+e.message;
   }
 };
-
 window.resetAllPlayerData = async function() {
-  if (!confirm('確定要清除 Hayden 和 Celine 的所有學習記錄嗎？\n此操作無法復原！')) return;
+  if (!confirm('確定要清除所有玩家的學習記錄嗎？\n此操作無法復原！')) return;
   showLoading('重設所有玩家數據中...');
   try {
     await deleteSubCollection('hayden','wordStats');
@@ -1442,21 +1531,20 @@ window.resetAllPlayerData = async function() {
     await deleteSubCollection('celine','wordStats');
     await deleteSubCollection('celine','sessions');
     hideLoading();
-    document.getElementById('reset-status').textContent = '所有玩家的數據已成功重設！';
+    document.getElementById('reset-status').textContent='所有玩家的數據已成功重設！';
     await loadParentStats();
   } catch(e) {
     hideLoading();
-    document.getElementById('reset-status').textContent = '重設失敗：' + e.message;
+    document.getElementById('reset-status').textContent='重設失敗：'+e.message;
   }
 };
-
 window.resetEverything = async function() {
-  if (!confirm('最終警告！這將會清除所有字庫和所有玩家記錄！確定要繼續嗎？')) return;
+  if (!confirm('最終警告！這將清除所有字庫和所有玩家記錄！確定繼續嗎？')) return;
   if (!confirm('再次確認：真的要清除全部數據嗎？')) return;
   showLoading('清除全部數據中...');
   try {
-    var libSnap = await getDocs(collection(db,'wordLibrary'));
-    var batch1 = writeBatch(db);
+    var libSnap=await getDocs(collection(db,'wordLibrary'));
+    var batch1=writeBatch(db);
     libSnap.forEach(function(d){ batch1.delete(d.ref); });
     if (!libSnap.empty) await batch1.commit();
     await deleteSubCollection('hayden','wordStats');
@@ -1466,69 +1554,67 @@ window.resetEverything = async function() {
     fullWordLibrary=[];
     await loadWordLibrary();
     hideLoading();
-    document.getElementById('reset-status').textContent = '全部數據已清除！';
+    document.getElementById('reset-status').textContent='全部數據已清除！';
     renderWordChips();
     await loadParentStats();
   } catch(e) {
     hideLoading();
-    document.getElementById('reset-status').textContent = '清除失敗：' + e.message;
+    document.getElementById('reset-status').textContent='清除失敗：'+e.message;
   }
 };
 
 // ====== EFFECTS ======
-function createSparkles(cx, cy) {
-  for (var i=0; i<10; i++) {
-    var el = document.createElement('div');
-    var angle = (Math.PI*2*i)/10;
-    var dist  = 40+Math.random()*60;
+function createSparkles(cx,cy) {
+  for (var i=0;i<10;i++) {
+    var el=document.createElement('div');
+    var angle=(Math.PI*2*i)/10;
+    var dist=40+Math.random()*60;
     el.className='sparkle';
-    var sc = sparkleColors[Math.floor(Math.random()*sparkleColors.length)];
-    var sw = 6+Math.random()*10;
-    el.style.cssText = 'left:'+cx+'px;top:'+cy+'px;background:'+sc+';width:'+sw+'px;height:'+sw+'px;';
-    el.style.setProperty('--dx', Math.cos(angle)*dist+'px');
-    el.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+    var sc=sparkleColors[Math.floor(Math.random()*sparkleColors.length)];
+    var sw=6+Math.random()*10;
+    el.style.cssText='left:'+cx+'px;top:'+cy+'px;background:'+sc+';width:'+sw+'px;height:'+sw+'px;';
+    el.style.setProperty('--dx',Math.cos(angle)*dist+'px');
+    el.style.setProperty('--dy',Math.sin(angle)*dist+'px');
     document.body.appendChild(el);
-    setTimeout(function(){ el.remove(); }, 800);
+    setTimeout(function(){ el.remove(); },800);
   }
-  var stars = ['\u2B50','\u2728','\u{1F4AB}','\u{1F31F}'];
+  var stars=['\u2B50','\u2728','\u{1F4AB}','\u{1F31F}'];
   stars.forEach(function(star){
-    var el2 = document.createElement('div');
-    var a = Math.random()*Math.PI*2;
-    var d = 50+Math.random()*50;
+    var el2=document.createElement('div');
+    var a=Math.random()*Math.PI*2;
+    var d=50+Math.random()*50;
     el2.className='star-sparkle'; el2.textContent=star;
     el2.style.cssText='left:'+cx+'px;top:'+cy+'px;';
-    el2.style.setProperty('--dx', Math.cos(a)*d+'px');
-    el2.style.setProperty('--dy', (Math.sin(a)*d-30)+'px');
+    el2.style.setProperty('--dx',Math.cos(a)*d+'px');
+    el2.style.setProperty('--dy',(Math.sin(a)*d-30)+'px');
     document.body.appendChild(el2);
-    setTimeout(function(){ el2.remove(); }, 1000);
+    setTimeout(function(){ el2.remove(); },1000);
   });
 }
-
-function createFloatingEmoji(cx, cy) {
-  var el = document.createElement('div');
+function createFloatingEmoji(cx,cy) {
+  var el=document.createElement('div');
   el.className='float-emoji';
-  var emojis = ['\u2B50','\u{1F31F}','\u2728','\u{1F44D}','\u{1F389}','\u{1F4AA}','\u{1F3C6}','\u2764\uFE0F'];
-  el.textContent = pickRandom(emojis);
+  var emojis=['\u2B50','\u{1F31F}','\u2728','\u{1F44D}','\u{1F389}','\u{1F4AA}','\u{1F3C6}','\u2764\uFE0F'];
+  el.textContent=pickRandom(emojis);
   el.style.cssText='left:'+(cx-25)+'px;top:'+(cy-30)+'px;';
   document.body.appendChild(el);
-  setTimeout(function(){ el.remove(); }, 1200);
+  setTimeout(function(){ el.remove(); },1200);
 }
-
 function createConfetti() {
   var colors=['#ff6b6b','#ffa500','#48c774','#3273dc','#b86bff','#ff85a2','#fdcb6e','#55efc4','#a29bfe','#fd79a8'];
-  for (var i=0; i<50; i++) {
+  for (var i=0;i<50;i++) {
     (function(){
-      var el = document.createElement('div');
+      var el=document.createElement('div');
       el.className='confetti-piece';
-      var c = colors[Math.floor(Math.random()*colors.length)];
-      var w = 6+Math.random()*8;
-      var h = 6+Math.random()*12;
-      var br = Math.random()>0.5?'50%':'2px';
-      var dur = 2+Math.random()*3;
-      var delay = Math.random()*1.5;
+      var c=colors[Math.floor(Math.random()*colors.length)];
+      var w=6+Math.random()*8;
+      var h=6+Math.random()*12;
+      var br=Math.random()>0.5?'50%':'2px';
+      var dur=2+Math.random()*3;
+      var delay=Math.random()*1.5;
       el.style.cssText='left:'+(Math.random()*100)+'vw;background:'+c+';width:'+w+'px;height:'+h+'px;border-radius:'+br+';animation-duration:'+dur+'s;animation-delay:'+delay+'s;';
       document.body.appendChild(el);
-      setTimeout(function(){ el.remove(); }, 6000);
+      setTimeout(function(){ el.remove(); },6000);
     })();
   }
 }
