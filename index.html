@@ -97,8 +97,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .player-emoji { font-size: 60px; margin-bottom: 10px; }
 .player-name { font-size: 20px; font-weight: bold; color: #555; }
 .player-desc { font-size: 12px; color: #aaa; margin-top: 4px; }
-
-/* Stats preview on player card */
 .player-stats-preview {
   margin-top: 8px; font-size: 12px; color: #888;
   background: #f5f5f5; border-radius: 8px; padding: 4px 10px;
@@ -154,12 +152,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .input-container textarea:focus { border-color: #ffa500; border-style: solid; }
 .input-container .hint { text-align: left; color: #aaa; font-size: 13px; margin-top: 6px; line-height: 1.8; }
 
-/* Word count info */
-.word-count-info {
-  background: #e3f2fd; border-radius: 12px; padding: 10px 15px;
-  margin: 10px 0; font-size: 14px; color: #1976d2; text-align: left;
-}
-
 /* ====== BUTTONS ====== */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
@@ -178,6 +170,7 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .btn-parent   { background: linear-gradient(135deg, #607d8b, #455a64); color: white; font-size: 16px; padding: 10px 28px; }
 .btn-add-word { background: linear-gradient(135deg, #48c774, #2ecc71); color: white; font-size: 16px; padding: 10px 28px; }
 .btn-back     { background: linear-gradient(135deg, #aaa, #888); color: white; font-size: 16px; padding: 10px 28px; }
+.btn-reset    { background: linear-gradient(135deg, #ff6b6b, #c0392b); color: white; font-size: 16px; padding: 10px 28px; }
 .btn-sm       { font-size: 14px; padding: 8px 18px; }
 
 /* ====== GAME PAGE ====== */
@@ -185,7 +178,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 
 .game-top { width: 100%; max-width: 900px; text-align: center; margin-bottom: 10px; }
 
-/* Current player badge */
 .current-player-badge {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(255,255,255,0.8); border-radius: 20px;
@@ -327,7 +319,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .card.multi-char { font-size: 36px; min-width: 120px; }
 .card.long-char  { font-size: 28px; min-width: 160px; }
 
-/* Weak word indicator */
 .card .weak-badge {
   position: absolute; top: -5px; right: -5px;
   background: #ff6b6b; color: white; border-radius: 50%;
@@ -393,7 +384,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .report-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 25px; }
 .empty-message { color: #bbb; font-size: 16px; font-style: italic; padding: 8px; }
 
-/* Cumulative stats in report */
 .cumulative-stats {
   background: linear-gradient(135deg, #e3f2fd, #e8f5e9);
   border-radius: 20px; padding: 20px; margin: 20px 0; text-align: left;
@@ -445,13 +435,22 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   font-weight: bold; color: white;
   background: linear-gradient(135deg, #607d8b, #455a64);
 }
-.word-chip.official { background: linear-gradient(135deg, #3273dc, #2980b9); }
 .word-chip .chip-delete {
   font-size: 14px; cursor: pointer; opacity: 0.7;
   transition: opacity 0.2s; background: none; border: none;
   color: white; padding: 0;
 }
 .word-chip .chip-delete:hover { opacity: 1; }
+
+/* Reset section */
+.reset-section {
+  margin-top: 30px; padding: 20px;
+  border: 2px dashed #ff6b6b; border-radius: 16px;
+  background: #fff5f5;
+}
+.reset-section h3 { font-size: 18px; color: #c62828; margin-bottom: 10px; }
+.reset-section p  { font-size: 14px; color: #888; margin-bottom: 15px; line-height: 1.6; }
+.reset-options { display: flex; flex-wrap: wrap; gap: 10px; }
 
 /* Player stats in parent */
 .player-stats-section { margin: 20px 0; }
@@ -467,7 +466,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
 .stat-row .label { color: #888; }
 .stat-row .value { font-weight: bold; color: #333; }
 
-/* Top weak words */
 .weak-words-list { margin-top: 10px; }
 .weak-word-item {
   display: flex; align-items: center; justify-content: space-between;
@@ -569,7 +567,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
     <div style="font-size:18px; letter-spacing:2px; color:#999; margin-bottom:5px;">✦ HAYDEN & CELINE ✦</div>
     <h1>🏙️ 城市大冒險 🏙️</h1>
     <p class="player-subtitle">你是誰？選擇你的角色開始冒險！</p>
-
     <div class="player-cards" id="player-cards">
       <div class="player-card hayden-card" onclick="selectPlayer('hayden')">
         <div class="player-emoji">👦</div>
@@ -584,28 +581,23 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
         <div class="player-stats-preview" id="celine-preview">讀取中...</div>
       </div>
     </div>
-
     <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
       <button class="btn btn-parent btn-sm" onclick="showPinEntry()">🔐 家長管理</button>
     </div>
   </div>
 </div>
 
-<!-- ====== PAGE 1: INPUT (for first time / no words) ====== -->
+<!-- ====== PAGE 1: INPUT ====== -->
 <div id="page-input" class="page">
   <div class="input-container">
     <div class="game-logo">✦ HAYDEN & CELINE ✦</div>
     <h1>🏙️ 城市大冒險 🏙️</h1>
-
     <div class="story-intro">
       <b>😱 不得了！城市裡的文字突然全部消失了！</b><br>
       所有招牌、路牌都變成空白的了⋯⋯<br><br>
       🦸 <b id="input-char-name">冒險者</b> 決定出發，走遍城市的每個角落，
       把認識的文字一個一個<b>找回來</b>！
     </div>
-
-    <div class="word-count-info" id="word-count-info" style="display:none;"></div>
-
     <label for="wordInput">📝 家長：請輸入要找回的文字</label>
     <textarea id="wordInput" placeholder="例如：大 小 爸爸 媽媽 老師 學校 吃飯 太陽"></textarea>
     <div class="hint">
@@ -626,8 +618,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       <span id="badge-emoji">👦</span>
       <span id="badge-name">Hayden</span>
     </div>
-
-    <!-- Route Map -->
     <div class="route-map" id="route-map">
       <div class="route-stop"><div class="route-icon active" id="stop-0">🏠</div><div class="route-label active" id="label-0">我的家</div></div>
       <div class="route-line" id="line-0"></div>
@@ -641,25 +631,20 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       <div class="route-line" id="line-4"></div>
       <div class="route-stop"><div class="route-icon" id="stop-5">🏰</div><div class="route-label" id="label-5">城堡</div></div>
     </div>
-
     <div class="scene-display" id="scene-display">
       <span class="scene-icon" id="scene-icon-display">🏠</span>
       <span class="scene-name" id="scene-name-display">準備出發！</span>
       <span class="scene-sky" id="scene-sky-display">🌅</span>
     </div>
-
     <div class="character-area" id="character-area">
       <div class="char-sprite" id="char-sprite">👦</div>
       <div class="dialogue-bubble" id="dialogue-bubble">走吧！我們去找文字！</div>
     </div>
-
     <div class="progress-row">
       <div class="progress-bar-container"><div class="progress-bar-fill" id="progress-fill"></div></div>
       <span class="progress-text" id="progress-text">0 / 0</span>
     </div>
-
     <div class="collectibles-bar" id="collectibles-bar"></div>
-
     <div class="game-toolbar">
       <button class="btn btn-undo" id="btn-undo" onclick="undoLast()" style="display:none;">↩️ 撤回</button>
       <button class="btn btn-finish" onclick="showConfirmFinish()">🏁 家長：結束冒險</button>
@@ -673,19 +658,14 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
   <div class="report-container">
     <h1>📔 <span id="report-name">冒險</span>日記</h1>
     <p class="report-subtitle">城市大冒險紀錄</p>
-
     <div class="report-route" id="report-route"></div>
     <div class="report-message" id="report-message"></div>
-
     <div class="report-stats">
       <div class="stat-box total"><span class="stat-num" id="stat-total">0</span><span class="stat-label">🔤 今日字卡</span></div>
       <div class="stat-box known"><span class="stat-num" id="stat-known">0</span><span class="stat-label">✅ 找回的字</span></div>
       <div class="stat-box unknown"><span class="stat-num" id="stat-unknown">0</span><span class="stat-label">🔍 未找到</span></div>
     </div>
-
     <div class="score-bar-container"><div class="score-bar-fill" id="score-bar-fill"></div></div>
-
-    <!-- Cumulative stats -->
     <div class="cumulative-stats" id="cumulative-stats">
       <h3>📈 <span id="cum-player-name">Hayden</span> 的成長記錄</h3>
       <div class="cum-stat-row"><span class="cum-stat-label">📚 字庫總字數</span><span class="cum-stat-value" id="cum-total">-</span></div>
@@ -693,12 +673,10 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       <div class="cum-stat-row"><span class="cum-stat-label">🎮 總遊戲次數</span><span class="cum-stat-value" id="cum-sessions">-</span></div>
       <div class="cum-stat-row"><span class="cum-stat-label">🔥 今日進步</span><span class="cum-stat-value" id="cum-today">-</span></div>
     </div>
-
     <div class="report-collectibles" id="report-collectibles">
       <h3>🎈 今次收集到的寶物</h3>
       <div class="collected-items" id="collected-items-display"></div>
     </div>
-
     <div class="report-section">
       <h3 class="known-title">✅ 成功找回的文字</h3>
       <div class="report-words" id="known-words"></div>
@@ -707,7 +685,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       <h3 class="unknown-title">🔍 還藏在城市裡的文字</h3>
       <div class="report-words" id="unknown-words"></div>
     </div>
-
     <div class="report-buttons">
       <button class="btn btn-again" onclick="replayGame()">🔄 再次冒險</button>
       <button class="btn btn-new" onclick="backToPlayerSelect()">🏠 返回選擇</button>
@@ -721,11 +698,11 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
     <h1>🔐 家長管理後台</h1>
     <p style="text-align:center; color:#888; margin-bottom:15px; font-size:14px;">Chinese Word Database</p>
 
-    <!-- Tabs -->
     <div class="parent-tabs">
-      <button class="tab-btn active" onclick="switchTab('tab-words')">📚 字庫管理</button>
-      <button class="tab-btn" onclick="switchTab('tab-stats')">📊 學習報告</button>
-      <button class="tab-btn" onclick="switchTab('tab-sessions')">📅 遊戲歷史</button>
+      <button class="tab-btn active" onclick="switchTab('tab-words', this)">📚 字庫管理</button>
+      <button class="tab-btn" onclick="switchTab('tab-stats', this)">📊 學習報告</button>
+      <button class="tab-btn" onclick="switchTab('tab-sessions', this)">📅 遊戲歷史</button>
+      <button class="tab-btn" onclick="switchTab('tab-reset', this)">🔄 重設數據</button>
     </div>
 
     <!-- Tab: Word Library -->
@@ -747,7 +724,6 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
           </select>
         </div>
       </div>
-
       <div class="word-library-display">
         <h3>📖 現有字庫（<span id="total-word-count">0</span> 個字）</h3>
         <div class="word-chips" id="word-chips-display"></div>
@@ -786,6 +762,33 @@ body.scene-parent  { background: linear-gradient(135deg, #e8eaf6, #e3f2fd, #e8f5
       </div>
     </div>
 
+    <!-- Tab: Reset -->
+    <div class="tab-content" id="tab-reset">
+      <div class="reset-section">
+        <h3>⚠️ 重設數據（測試用）</h3>
+        <p>
+          ⚠️ 注意：重設後數據<b>無法復原</b>！<br>
+          適合在測試階段使用，正式使用前請先重設。
+        </p>
+        <div class="reset-options">
+          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('hayden')">
+            🗑️ 重設 Hayden 的學習記錄
+          </button>
+          <button class="btn btn-reset btn-sm" onclick="resetPlayerData('celine')">
+            🗑️ 重設 Celine 的學習記錄
+          </button>
+          <button class="btn btn-reset btn-sm" onclick="resetAllPlayerData()">
+            🗑️ 重設所有玩家記錄
+          </button>
+          <button class="btn btn-sm" style="background:linear-gradient(135deg,#ff6b6b,#c0392b);color:white;"
+            onclick="resetEverything()">
+            💥 全部清除（字庫 + 所有記錄）
+          </button>
+        </div>
+        <div id="reset-status" style="margin-top:15px; font-size:15px; color:#388e3c; font-weight:bold;"></div>
+      </div>
+    </div>
+
     <div style="margin-top:25px; text-align:center;">
       <button class="btn btn-back btn-sm" onclick="backToPlayerSelect()">← 返回主頁</button>
     </div>
@@ -798,7 +801,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/fireba
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc,
   collection, getDocs, addDoc, deleteDoc,
-  query, orderBy, limit, serverTimestamp
+  query, orderBy, limit, serverTimestamp, writeBatch
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -816,9 +819,9 @@ const db = getFirestore(app);
 
 // ====== STATE ======
 let currentPlayer = '';
-let allWords = [];          // words selected for this game (max 100)
-let fullWordLibrary = [];   // all words from Firebase
-let wordStatsMap = {};      // { word: { shown, success, fail, lastSeen } }
+let allWords = [];
+let fullWordLibrary = [];
+let wordStatsMap = {};
 let knownWords = [];
 let unknownWords = [];
 let undoStack = [];
@@ -827,16 +830,16 @@ let currentSceneIndex = 0;
 let lastMilestone = -1;
 let audioCtx = null;
 let sessionStartTime = null;
-const PARENT_PIN = '1234';  // 家長PIN碼
+const PARENT_PIN = '1234';
 
 // ====== SCENE CONFIG ======
 const scenes = [
-  { name: '我的家',    icon: '🏠', sky: '🌅', bg: 'scene-home',   items: ['🏠','🔑','🛏️','🧸','🌼','💝'] },
-  { name: '城市公園',  icon: '🌳', sky: '☀️', bg: 'scene-park',   items: ['🎈','🦋','🌸','🐿️','🍀','🌺','🐞','🌻'] },
-  { name: '熱鬧商店街',icon: '🏪', sky: '🌤️', bg: 'scene-shop',   items: ['🍦','🧁','🎁','🛍️','🍩','🧸','🍭','🎀'] },
-  { name: '快樂學校',  icon: '🏫', sky: '🌇', bg: 'scene-school', items: ['📚','⭐','🏅','✏️','📖','🎓','🔔','📐'] },
-  { name: '歡樂遊樂場',icon: '🎡', sky: '🌆', bg: 'scene-fun',    items: ['🎠','🎪','🌟','🎢','🎭','🎵','🎨','🎯'] },
-  { name: '勝利城堡！',icon: '🏰', sky: '🌙✨', bg: 'scene-castle',items: ['🏆','👑','🎆','💎','🌙','💫','🔮','✨'] }
+  { name: '我的家',     icon: '🏠', sky: '🌅', bg: 'scene-home',   items: ['🏠','🔑','🛏️','🧸','🌼','💝'] },
+  { name: '城市公園',   icon: '🌳', sky: '☀️', bg: 'scene-park',   items: ['🎈','🦋','🌸','🐿️','🍀','🌺','🐞','🌻'] },
+  { name: '熱鬧商店街', icon: '🏪', sky: '🌤️', bg: 'scene-shop',   items: ['🍦','🧁','🎁','🛍️','🍩','🧸','🍭','🎀'] },
+  { name: '快樂學校',   icon: '🏫', sky: '🌇', bg: 'scene-school', items: ['📚','⭐','🏅','✏️','📖','🎓','🔔','📐'] },
+  { name: '歡樂遊樂場', icon: '🎡', sky: '🌆', bg: 'scene-fun',    items: ['🎠','🎪','🌟','🎢','🎭','🎵','🎨','🎯'] },
+  { name: '勝利城堡！', icon: '🏰', sky: '🌙✨', bg: 'scene-castle',items: ['🏆','👑','🎆','💎','🌙','💫','🔮','✨'] }
 ];
 
 const charEmoji = { hayden: '👦', celine: '👧' };
@@ -871,7 +874,8 @@ const dialogues = {
 
 // ====== HELPERS ======
 function setBodyScene(cls) {
-  const all = ['scene-player','scene-input','scene-home','scene-park','scene-shop','scene-school','scene-fun','scene-castle','scene-report','scene-parent'];
+  const all = ['scene-player','scene-input','scene-home','scene-park','scene-shop',
+               'scene-school','scene-fun','scene-castle','scene-report','scene-parent'];
   document.body.classList.remove(...all);
   document.body.classList.add(cls);
 }
@@ -932,12 +936,13 @@ function playMilestoneSound()   { playSound([440, 554, 659], 0.12, 0.3); }
 
 // ====== SKYLINE ======
 function buildSkyline() {
-  const w = [30,18,40,15,35,20,45,22,28,50,16,38,25,42,20,30,18,35,15,40,25];
-  const h = [60,90,45,70,80,55,100,65,50,110,40,75,85,95,60,70,55,80,45,90,65];
+  const widths  = [30,18,40,15,35,20,45,22,28,50,16,38,25,42,20,30,18,35,15,40,25];
+  const heights = [60,90,45,70,80,55,100,65,50,110,40,75,85,95,60,70,55,80,45,90,65];
+  const buildings = widths.map((w, i) =>
+    `<div class="building" style="width:\${w}px;height:\${heights[i]}px;"></div>`
+  ).join('');
   document.getElementById('skyline').innerHTML =
-    '<div class="skyline-buildings">' +
-    w.map((wd,i) => `<div class="building" style="width:\${wd}px;height:\${h[i]}px;"></div>`).join('') +
-    '</div>';
+    `<div class="skyline-buildings">\${buildings}</div>`;
 }
 
 // ====== FIREBASE: WORD LIBRARY ======
@@ -956,7 +961,6 @@ async function loadWordLibrary() {
 }
 
 async function addWordToLibrary(word, category = '一般') {
-  // Check not already exists
   const exists = fullWordLibrary.find(w => w.word === word);
   if (exists) return false;
   await addDoc(collection(db, 'wordLibrary'), {
@@ -993,17 +997,16 @@ async function saveWordResult(player, word, success) {
     if (existing) {
       const updated = {
         word,
-        shown:    (existing.shown || 0) + 1,
-        success:  (existing.success || 0) + (success ? 1 : 0),
-        fail:     (existing.fail || 0) + (success ? 0 : 1),
+        shown:   (existing.shown || 0) + 1,
+        success: (existing.success || 0) + (success ? 1 : 0),
+        fail:    (existing.fail || 0) + (success ? 0 : 1),
         lastSeen: serverTimestamp()
       };
       await setDoc(statsRef, updated);
       wordStatsMap[word] = updated;
     } else {
       const newStat = {
-        word,
-        shown: 1,
+        word, shown: 1,
         success: success ? 1 : 0,
         fail: success ? 0 : 1,
         lastSeen: serverTimestamp()
@@ -1037,7 +1040,7 @@ async function getPlayerSummary(player) {
     let totalShown = 0, totalSuccess = 0, knownCount = 0;
     statsSnap.forEach(d => {
       const s = d.data();
-      totalShown += (s.shown || 0);
+      totalShown   += (s.shown || 0);
       totalSuccess += (s.success || 0);
       if (s.shown > 0 && (s.success / s.shown) >= 0.8) knownCount++;
     });
@@ -1051,16 +1054,15 @@ async function getPlayerSummary(player) {
   } catch(e) { return { totalWords: 0, knownCount: 0, sessions: 0, avgRate: 0 }; }
 }
 
-// ====== SMART WORD SELECTION (max 100) ======
+// ====== SMART WORD SELECTION ======
 function selectSmartWords(library, stats, maxCount = 100) {
   const now = Date.now();
   const scored = library.map(item => {
     const w = item.word;
     const s = stats[w];
     let priority = 0;
-
     if (!s || s.shown === 0) {
-      priority = 100; // Never seen
+      priority = 100;
     } else {
       const rate = s.success / s.shown;
       if (rate < 0.3)       priority = 90;
@@ -1068,68 +1070,53 @@ function selectSmartWords(library, stats, maxCount = 100) {
       else if (rate < 0.7)  priority = 55;
       else if (rate < 0.85) priority = 35;
       else                   priority = 15;
-
-      // Days since last seen bonus
       if (s.lastSeen) {
         const lastMs = s.lastSeen.toMillis ? s.lastSeen.toMillis() : (s.lastSeen.seconds * 1000);
         const daysSince = (now - lastMs) / (1000 * 60 * 60 * 24);
-        if (daysSince > 30) priority += 40;
+        if (daysSince > 30)      priority += 40;
         else if (daysSince > 14) priority += 25;
-        else if (daysSince > 7) priority += 15;
-        else if (daysSince > 3) priority += 8;
+        else if (daysSince > 7)  priority += 15;
+        else if (daysSince > 3)  priority += 8;
       }
     }
     return { ...item, priority };
   });
-
-  // Sort by priority (highest first), then shuffle within same priority
   scored.sort((a, b) => b.priority - a.priority);
-
-  // Take top maxCount
-  const selected = scored.slice(0, maxCount);
-  return shuffle(selected).map(s => s.word);
+  return shuffle(scored.slice(0, maxCount)).map(s => s.word);
 }
 
 // ====== INIT ======
 async function init() {
   buildSkyline();
   showLoading('連接城市資料庫...');
-
   await loadWordLibrary();
-
-  // Load player previews
   const hSummary = await getPlayerSummary('hayden');
   const cSummary = await getPlayerSummary('celine');
+  updatePlayerPreviews(hSummary, cSummary);
+  hideLoading();
+  setBodyScene('scene-player');
+  showPage('page-player');
+}
 
+function updatePlayerPreviews(hSummary, cSummary) {
   document.getElementById('hayden-preview').textContent =
     hSummary.knownCount > 0 ? `認識 \${hSummary.knownCount} 個字 ⭐` : '開始第一次冒險！';
   document.getElementById('celine-preview').textContent =
     cSummary.knownCount > 0 ? `認識 \${cSummary.knownCount} 個字 ⭐` : '開始第一次冒險！';
-
-  hideLoading();
-  setBodyScene('scene-player');
-  showPage('page-player');
 }
 
 // ====== PLAYER SELECT ======
 window.selectPlayer = async function(player) {
   currentPlayer = player;
   showLoading('準備冒險裝備...');
-
-  // Load player word stats
   await loadPlayerStats(player);
-
   hideLoading();
-
   if (fullWordLibrary.length === 0) {
-    // No words in library yet - go to input page
     document.getElementById('input-char-name').textContent = charNames[player];
     setBodyScene('scene-home');
     showPage('page-input');
   } else {
-    // Have words - smart select and start
     allWords = selectSmartWords(fullWordLibrary, wordStatsMap, 100);
-    document.getElementById('input-char-name').textContent = charNames[player];
     startGameDirect();
   }
 };
@@ -1150,8 +1137,7 @@ window.showPinEntry = function() {
       <div style="margin-top:15px;">
         <button class="btn btn-back btn-sm" onclick="document.getElementById('pin-overlay').remove()">取消</button>
       </div>
-    </div>
-  `;
+    </div>`;
   document.body.appendChild(overlay);
   setTimeout(() => document.getElementById('pin-input-field').focus(), 100);
 };
@@ -1181,47 +1167,33 @@ async function openParentDashboard() {
 window.startGame = async function() {
   const input = document.getElementById('wordInput').value.trim();
   if (!input) { alert('請先輸入中文字！'); return; }
-
   const newWords = parseInput(input);
   if (newWords.length === 0) { alert('請輸入有效的中文字！'); return; }
-
   showLoading('儲存字庫到雲端...');
-
-  // Add new words to Firebase library
   for (const word of newWords) {
     await addWordToLibrary(word, '一般');
   }
-
-  // Reload library
   await loadWordLibrary();
   await loadPlayerStats(currentPlayer);
-
-  // Select smart words
   allWords = selectSmartWords(fullWordLibrary, wordStatsMap, 100);
   hideLoading();
   startGameDirect();
 };
 
 function startGameDirect() {
-  knownWords = [];
-  unknownWords = [];
-  undoStack = [];
-  collectedItems = [];
-  currentSceneIndex = 0;
-  lastMilestone = -1;
+  knownWords = []; unknownWords = []; undoStack = [];
+  collectedItems = []; currentSceneIndex = 0; lastMilestone = -1;
   sessionStartTime = Date.now();
-
-  // Update badge
-  document.getElementById('badge-emoji').textContent = charEmoji[currentPlayer];
-  document.getElementById('badge-name').textContent  = charNames[currentPlayer];
-  document.getElementById('char-sprite').textContent = charEmoji[currentPlayer];
-  document.getElementById('btn-undo').style.display = 'none';
-
+  document.getElementById('badge-emoji').textContent  = charEmoji[currentPlayer];
+  document.getElementById('badge-name').textContent   = charNames[currentPlayer];
+  document.getElementById('char-sprite').textContent  = charEmoji[currentPlayer];
+  document.getElementById('btn-undo').style.display   = 'none';
   setDialogue(pickRandom(dialogues.start));
   buildGameCards();
   updateScene(true);
   updateProgress();
   updateCollectiblesDisplay();
+  setBodyScene(scenes[0].bg);
   showPage('page-game');
 }
 
@@ -1233,8 +1205,6 @@ function buildGameCards() {
   words.forEach((word, i) => {
     const stats = wordStatsMap[word];
     const isWeak = stats && stats.shown > 0 && (stats.success / stats.shown) < 0.5;
-    const isNew  = !stats || stats.shown === 0;
-
     const card = document.createElement('div');
     card.className = 'card';
     card.textContent = word;
@@ -1243,15 +1213,12 @@ function buildGameCards() {
     card.style.animationDelay = (i * 0.06) + 's';
     if (word.length === 2) card.classList.add('multi-char');
     else if (word.length >= 3) card.classList.add('long-char');
-
-    // Weak word badge
     if (isWeak) {
       const badge = document.createElement('div');
       badge.className = 'weak-badge';
       badge.textContent = '!';
       card.appendChild(badge);
     }
-
     card.addEventListener('click', () => onCardClick(card, word));
     area.appendChild(card);
   });
@@ -1263,21 +1230,17 @@ function onCardClick(card, word) {
   const rect = card.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
-
   knownWords.push(word);
   undoStack.push({ word, card });
   playHappySound();
   createSparkles(cx, cy);
   createFloatingEmoji(cx, cy);
   addCollectible();
-
   const sprite = document.getElementById('char-sprite');
   sprite.classList.remove('jump');
   void sprite.offsetWidth;
   sprite.classList.add('jump');
-
   if (Math.random() < 0.4) setDialogue(pickRandom(dialogues.found));
-
   card.classList.add('removing');
   setTimeout(() => {
     card.style.display = 'none';
@@ -1287,7 +1250,6 @@ function onCardClick(card, word) {
       setTimeout(showAllDoneCelebration, 400);
     }
   }, 600);
-
   document.getElementById('btn-undo').style.display = 'inline-flex';
 }
 
@@ -1314,10 +1276,10 @@ window.undoLast = function() {
 function getSceneIndex() {
   const pct = allWords.length > 0 ? (knownWords.length / allWords.length * 100) : 0;
   if (pct >= 100) return 5;
-  if (pct >= 76) return 4;
-  if (pct >= 51) return 3;
-  if (pct >= 26) return 2;
-  if (pct >= 1)  return 1;
+  if (pct >= 76)  return 4;
+  if (pct >= 51)  return 3;
+  if (pct >= 26)  return 2;
+  if (pct >= 1)   return 1;
   return 0;
 }
 
@@ -1326,25 +1288,21 @@ function updateScene(isInit) {
   const changed = newIndex !== currentSceneIndex;
   currentSceneIndex = newIndex;
   const scene = scenes[currentSceneIndex];
-
   setBodyScene(scene.bg);
   document.getElementById('scene-icon-display').textContent = scene.icon;
   document.getElementById('scene-name-display').textContent = scene.name;
   document.getElementById('scene-sky-display').textContent  = scene.sky;
-
   for (let i = 0; i <= 5; i++) {
-    const stop = document.getElementById('stop-' + i);
+    const stop  = document.getElementById('stop-' + i);
     const label = document.getElementById('label-' + i);
     stop.classList.remove('active','done');
     label.classList.remove('active','done');
-    if (i < currentSceneIndex) { stop.classList.add('done'); label.classList.add('done'); }
-    else if (i === currentSceneIndex) { stop.classList.add('active'); label.classList.add('active'); }
+    if (i < currentSceneIndex)      { stop.classList.add('done');   label.classList.add('done'); }
+    else if (i === currentSceneIndex){ stop.classList.add('active'); label.classList.add('active'); }
   }
   for (let j = 0; j < 5; j++) {
-    const line = document.getElementById('line-' + j);
-    line.classList.toggle('done', j < currentSceneIndex);
+    document.getElementById('line-' + j).classList.toggle('done', j < currentSceneIndex);
   }
-
   if (changed && !isInit && currentSceneIndex > 0 && currentSceneIndex !== lastMilestone) {
     lastMilestone = currentSceneIndex;
     playMilestoneSound();
@@ -1358,9 +1316,9 @@ function showMilestonePopup(scene) {
   const popup = document.createElement('div');
   popup.className = 'milestone-popup';
   popup.innerHTML = `
-    <div style="font-size:60px; margin-bottom:10px;">\${scene.icon}</div>
-    <div style="font-size:24px; font-weight:bold; color:#333; margin-bottom:8px;">到達 \${scene.name}！</div>
-    <div style="font-size:18px; color:#888;">太棒了！繼續冒險吧！\${scene.sky}</div>`;
+    <div style="font-size:60px;margin-bottom:10px;">\${scene.icon}</div>
+    <div style="font-size:24px;font-weight:bold;color:#333;margin-bottom:8px;">到達 \${scene.name}！</div>
+    <div style="font-size:18px;color:#888;">太棒了！繼續冒險吧！\${scene.sky}</div>`;
   document.body.appendChild(popup);
   createConfetti();
   setTimeout(() => {
@@ -1377,12 +1335,14 @@ function addCollectible() {
   collectedItems.push(item);
   updateCollectiblesDisplay();
 }
+
 function updateCollectiblesDisplay() {
   const bar = document.getElementById('collectibles-bar');
   const start = Math.max(0, collectedItems.length - 15);
-  bar.innerHTML = collectedItems.slice(start).map((item, i) =>
-    `<span class="collectible-item" \${i === collectedItems.length - start - 1 ? 'style="animation:collectPop 0.5s ease;"' : ''}>\${item}</span>`
-  ).join('');
+  bar.innerHTML = collectedItems.slice(start).map((item, i) => {
+    const isNew = i === collectedItems.length - start - 1;
+    return `<span class="collectible-item" \${isNew ? 'style="animation:collectPop 0.5s ease;"' : ''}>\${item}</span>`;
+  }).join('');
 }
 
 function setDialogue(text) {
@@ -1408,13 +1368,13 @@ window.showConfirmFinish = function() {
   overlay.id = 'confirm-overlay';
   overlay.innerHTML = `
     <div class="celebration-content">
-      <div style="font-size:50px; margin-bottom:10px;">🏁</div>
-      <h2 style="font-size:24px; color:#333; margin-bottom:10px;">結束今天的冒險？</h2>
-      <p style="font-size:16px; color:#888; margin-bottom:20px;">
+      <div style="font-size:50px;margin-bottom:10px;">🏁</div>
+      <h2 style="font-size:24px;color:#333;margin-bottom:10px;">結束今天的冒險？</h2>
+      <p style="font-size:16px;color:#888;margin-bottom:20px;">
         還有 <b style="color:#ff6b6b;">\${remaining}</b> 個文字未找到，<br>
         將會標記為「還藏在城市裡」。
       </p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <button class="btn btn-sm" style="background:linear-gradient(135deg,#48c774,#36d1dc);color:white;"
           onclick="document.getElementById('confirm-overlay').remove(); finishGame();">✅ 結束冒險</button>
         <button class="btn btn-sm" style="background:linear-gradient(135deg,#aaa,#888);color:white;"
@@ -1434,10 +1394,10 @@ function showAllDoneCelebration() {
   overlay.className = 'celebration';
   overlay.innerHTML = `
     <div class="celebration-content">
-      <div style="font-size:70px; margin-bottom:10px;">🎉🏰🎉</div>
-      <h2 style="font-size:28px; color:#333; margin-bottom:8px;">城市英雄 \${name}！</h2>
-      <p style="font-size:20px; color:#666; margin-bottom:8px;">所有文字都找回來了！</p>
-      <p style="font-size:18px; color:#888; margin-bottom:20px;">城市恢復正常了！你真厲害！🏙️✨</p>
+      <div style="font-size:70px;margin-bottom:10px;">🎉🏰🎉</div>
+      <h2 style="font-size:28px;color:#333;margin-bottom:8px;">城市英雄 \${name}！</h2>
+      <p style="font-size:20px;color:#666;margin-bottom:8px;">所有文字都找回來了！</p>
+      <p style="font-size:18px;color:#888;margin-bottom:20px;">城市恢復正常了！你真厲害！🏙️✨</p>
       <button class="btn btn-again" onclick="this.closest('.celebration').remove(); finishGame();">📔 查看冒險日記</button>
     </div>`;
   document.body.appendChild(overlay);
@@ -1447,21 +1407,14 @@ function showAllDoneCelebration() {
 window.finishGame = async function() {
   document.querySelectorAll('.celebration, .milestone-popup').forEach(e => e.remove());
   showLoading('儲存冒險記錄...');
-
-  // Determine unknown words
   const knownSet = new Set(knownWords);
   const unknownList = allWords.filter(w => !knownSet.has(w));
-
-  // Save each word result to Firebase
   const savePromises = [];
-  for (const w of knownWords) savePromises.push(saveWordResult(currentPlayer, w, true));
-  for (const w of unknownList) savePromises.push(saveWordResult(currentPlayer, w, false));
+  for (const w of knownWords)    savePromises.push(saveWordResult(currentPlayer, w, true));
+  for (const w of unknownList)   savePromises.push(saveWordResult(currentPlayer, w, false));
   await Promise.all(savePromises);
   await saveSession(currentPlayer, allWords.length, knownWords.length, unknownList);
-
-  // Get updated cumulative stats
   const summary = await getPlayerSummary(currentPlayer);
-
   hideLoading();
   renderReport(knownWords, unknownList, summary);
 };
@@ -1472,10 +1425,10 @@ function renderReport(knownList, unknownList, summary) {
   const total = allWords.length;
   const pct = total > 0 ? Math.round(knownList.length / total * 100) : 0;
 
-  document.getElementById('report-name').textContent = charNames[currentPlayer] + ' 的冒險';
-  document.getElementById('stat-total').textContent   = total;
-  document.getElementById('stat-known').textContent   = knownList.length;
-  document.getElementById('stat-unknown').textContent = unknownList.length;
+  document.getElementById('report-name').textContent    = charNames[currentPlayer] + ' 的冒險';
+  document.getElementById('stat-total').textContent     = total;
+  document.getElementById('stat-known').textContent     = knownList.length;
+  document.getElementById('stat-unknown').textContent   = unknownList.length;
 
   const scoreBar = document.getElementById('score-bar-fill');
   scoreBar.style.width = '0%'; scoreBar.textContent = '';
@@ -1489,8 +1442,10 @@ function renderReport(knownList, unknownList, summary) {
   const stopIcons = ['🏠','🌳','🏪','🏫','🎡','🏰'];
   const reached = getSceneIndex();
   document.getElementById('report-route').innerHTML = stopIcons.map((ic, s) => {
-    const cls = s < reached ? 'done' : s === reached ? 'current' : '';
-    const line = s < 5 ? `<div class="rr-line \${s < reached ? 'done' : ''}"></div>` : '';
+    const cls  = s < reached ? 'done' : s === reached ? 'current' : '';
+    const line = s < 5
+      ? `<div class="rr-line \${s < reached ? 'done' : ''}"></div>`
+      : '';
     return `<div class="rr-stop \${cls}">\${ic}</div>\${line}`;
   }).join('');
 
@@ -1509,22 +1464,21 @@ function renderReport(knownList, unknownList, summary) {
   document.getElementById('cum-total').textContent    = fullWordLibrary.length + ' 個字';
   document.getElementById('cum-known').textContent    = summary.knownCount + ' 個字';
   document.getElementById('cum-sessions').textContent = summary.sessions + ' 次';
-  const todayNew = knownList.length;
-  document.getElementById('cum-today').textContent = '+' + todayNew + ' 個字';
+  document.getElementById('cum-today').textContent    = '+' + knownList.length + ' 個字';
 
   // Collectibles
   document.getElementById('collected-items-display').innerHTML =
-    collectedItems.length > 0 ? collectedItems.join('') : '<span style="color:#ccc">還沒有收集到寶物</span>';
+    collectedItems.length > 0
+      ? collectedItems.join('')
+      : '<span style="color:#ccc">還沒有收集到寶物</span>';
 
   // Known words
-  const knownContainer = document.getElementById('known-words');
-  knownContainer.innerHTML = knownList.length === 0
+  document.getElementById('known-words').innerHTML = knownList.length === 0
     ? '<p class="empty-message">（還沒有找到文字）</p>'
     : knownList.map(w => `<span class="report-word known">\${w}</span>`).join('');
 
   // Unknown words
-  const unknownContainer = document.getElementById('unknown-words');
-  unknownContainer.innerHTML = unknownList.length === 0
+  document.getElementById('unknown-words').innerHTML = unknownList.length === 0
     ? '<p class="empty-message">（全部都找回來了！🎉）</p>'
     : unknownList.map(w => `<span class="report-word unknown">\${w}</span>`).join('');
 
@@ -1555,36 +1509,33 @@ window.backToPlayerSelect = async function() {
   await loadWordLibrary();
   const hSummary = await getPlayerSummary('hayden');
   const cSummary = await getPlayerSummary('celine');
-  document.getElementById('hayden-preview').textContent =
-    hSummary.knownCount > 0 ? `認識 \${hSummary.knownCount} 個字 ⭐` : '開始第一次冒險！';
-  document.getElementById('celine-preview').textContent =
-    cSummary.knownCount > 0 ? `認識 \${cSummary.knownCount} 個字 ⭐` : '開始第一次冒險！';
+  updatePlayerPreviews(hSummary, cSummary);
   hideLoading();
   setBodyScene('scene-player');
   showPage('page-player');
 };
 
 // ====== PARENT DASHBOARD ======
-window.switchTab = function(tabId) {
+window.switchTab = function(tabId, btn) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 };
 
 function renderWordChips() {
   const container = document.getElementById('word-chips-display');
   document.getElementById('total-word-count').textContent = fullWordLibrary.length;
   if (fullWordLibrary.length === 0) {
-    container.innerHTML = '<p style="color:#bbb; font-size:14px;">字庫為空，請新增字詞</p>';
+    container.innerHTML = '<p style="color:#bbb;font-size:14px;">字庫為空，請新增字詞</p>';
     return;
   }
-  container.innerHTML = fullWordLibrary.map(item => `
-    <div class="word-chip">
+  container.innerHTML = fullWordLibrary.map(item =>
+    `<div class="word-chip">
       \${item.word}
       <button class="chip-delete" onclick="removeWord('\${item.id}', this)" title="刪除">✕</button>
-    </div>
-  `).join('');
+    </div>`
+  ).join('');
 }
 
 window.removeWord = async function(docId, btn) {
@@ -1613,24 +1564,18 @@ window.addWordsToLibrary = async function() {
 };
 
 async function loadParentStats() {
-  // Hayden stats
   const hStats = await loadPlayerStatsForParent('hayden');
   const cStats = await loadPlayerStatsForParent('celine');
-
   const hSummary = await getPlayerSummary('hayden');
   const cSummary = await getPlayerSummary('celine');
-
-  document.getElementById('p-hayden-known').textContent = hSummary.knownCount + ' 個字';
+  document.getElementById('p-hayden-known').textContent    = hSummary.knownCount + ' 個字';
   document.getElementById('p-hayden-sessions').textContent = hSummary.sessions + ' 次';
-  document.getElementById('p-hayden-rate').textContent = hSummary.avgRate + '%';
-
-  document.getElementById('p-celine-known').textContent = cSummary.knownCount + ' 個字';
+  document.getElementById('p-hayden-rate').textContent     = hSummary.avgRate + '%';
+  document.getElementById('p-celine-known').textContent    = cSummary.knownCount + ' 個字';
   document.getElementById('p-celine-sessions').textContent = cSummary.sessions + ' 次';
-  document.getElementById('p-celine-rate').textContent = cSummary.avgRate + '%';
-
+  document.getElementById('p-celine-rate').textContent     = cSummary.avgRate + '%';
   renderWeakWords('hayden-weak-words', hStats);
   renderWeakWords('celine-weak-words', cStats);
-
   await loadSessions();
 }
 
@@ -1648,9 +1593,8 @@ function renderWeakWords(containerId, stats) {
     .map(s => ({ ...s, rate: s.success / s.shown }))
     .sort((a, b) => a.rate - b.rate)
     .slice(0, 5);
-
   if (weak.length === 0) {
-    container.innerHTML = '<p style="color:#bbb; font-size:13px; margin-top:6px;">暫無數據</p>';
+    container.innerHTML = '<p style="color:#bbb;font-size:13px;margin-top:6px;">暫無數據</p>';
     return;
   }
   container.innerHTML = weak.map(s => {
@@ -1660,7 +1604,7 @@ function renderWeakWords(containerId, stats) {
       <div class="weak-word-item">
         <span class="weak-word-char">\${s.word}</span>
         <div class="weak-word-bar-container">
-          <div class="weak-word-bar" style="width:\${pct}%; background:\${barColor};"></div>
+          <div class="weak-word-bar" style="width:\${pct}%;background:\${barColor};"></div>
         </div>
         <span class="weak-word-pct">\${pct}%</span>
       </div>`;
@@ -1672,29 +1616,21 @@ async function loadSessions() {
   try {
     const hSnap = await getDocs(query(collection(db, 'players', 'hayden', 'sessions'), orderBy('date', 'desc'), limit(10)));
     const cSnap = await getDocs(query(collection(db, 'players', 'celine', 'sessions'), orderBy('date', 'desc'), limit(10)));
-
     const sessions = [];
     hSnap.forEach(d => sessions.push({ player: 'hayden', ...d.data() }));
     cSnap.forEach(d => sessions.push({ player: 'celine', ...d.data() }));
-
-    sessions.sort((a, b) => {
-      const at = a.date?.seconds || 0;
-      const bt = b.date?.seconds || 0;
-      return bt - at;
-    });
-
+    sessions.sort((a, b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
     if (sessions.length === 0) {
-      container.innerHTML = '<p style="color:#bbb; font-size:14px;">尚無遊戲記錄</p>';
+      container.innerHTML = '<p style="color:#bbb;font-size:14px;">尚無遊戲記錄</p>';
       return;
     }
-
     container.innerHTML = sessions.slice(0, 15).map(s => {
       const d = s.date ? new Date(s.date.seconds * 1000) : new Date();
       const dateStr = `\${d.getMonth()+1}/\${d.getDate()} \${d.getHours()}:\${String(d.getMinutes()).padStart(2,'0')}`;
       const pct = s.percentage || 0;
       const pctColor = pct >= 80 ? '#48c774' : pct >= 50 ? '#ffa500' : '#ff6b6b';
       const emoji = s.player === 'hayden' ? '👦' : '👧';
-      const name = s.player === 'hayden' ? 'Hayden' : 'Celine';
+      const name  = s.player === 'hayden' ? 'Hayden' : 'Celine';
       return `
         <div class="session-item">
           <span class="session-date">\${dateStr}</span>
@@ -1704,16 +1640,91 @@ async function loadSessions() {
         </div>`;
     }).join('');
   } catch(e) {
-    container.innerHTML = '<p style="color:#bbb; font-size:14px;">載入失敗，請重試</p>';
+    container.innerHTML = '<p style="color:#bbb;font-size:14px;">載入失敗，請重試</p>';
   }
 }
+
+// ====== RESET FUNCTIONS ======
+
+// 刪除某玩家的所有 sub-collection 文件
+async function deleteSubCollection(player, subCol) {
+  const snap = await getDocs(collection(db, 'players', player, subCol));
+  const batch = writeBatch(db);
+  snap.forEach(d => batch.delete(d.ref));
+  if (!snap.empty) await batch.commit();
+}
+
+// 重設單一玩家數據
+window.resetPlayerData = async function(player) {
+  const name = player === 'hayden' ? 'Hayden' : 'Celine';
+  if (!confirm(`⚠️ 確定要清除 \${name} 的所有學習記錄嗎？\n此操作無法復原！`)) return;
+  showLoading(`重設 \${name} 的數據中...`);
+  try {
+    await deleteSubCollection(player, 'wordStats');
+    await deleteSubCollection(player, 'sessions');
+    hideLoading();
+    document.getElementById('reset-status').textContent = `✅ \${name} 的數據已成功重設！`;
+    await loadParentStats();
+  } catch(e) {
+    hideLoading();
+    document.getElementById('reset-status').textContent = `❌ 重設失敗：\${e.message}`;
+  }
+};
+
+// 重設所有玩家數據
+window.resetAllPlayerData = async function() {
+  if (!confirm('⚠️ 確定要清除 Hayden 和 Celine 的所有學習記錄嗎？\n此操作無法復原！')) return;
+  showLoading('重設所有玩家數據中...');
+  try {
+    await deleteSubCollection('hayden', 'wordStats');
+    await deleteSubCollection('hayden', 'sessions');
+    await deleteSubCollection('celine', 'wordStats');
+    await deleteSubCollection('celine', 'sessions');
+    hideLoading();
+    document.getElementById('reset-status').textContent = '✅ 所有玩家的數據已成功重設！';
+    await loadParentStats();
+  } catch(e) {
+    hideLoading();
+    document.getElementById('reset-status').textContent = `❌ 重設失敗：\${e.message}`;
+  }
+};
+
+// 全部清除（字庫 + 所有玩家記錄）
+window.resetEverything = async function() {
+  if (!confirm('⚠️⚠️ 最終警告！\n這將會清除【所有字庫】和【所有玩家記錄】！\n確定要繼續嗎？')) return;
+  if (!confirm('再次確認：真的要清除全部數據嗎？')) return;
+  showLoading('清除全部數據中...');
+  try {
+    // 清字庫
+    const libSnap = await getDocs(collection(db, 'wordLibrary'));
+    const batch1 = writeBatch(db);
+    libSnap.forEach(d => batch1.delete(d.ref));
+    if (!libSnap.empty) await batch1.commit();
+
+    // 清玩家記錄
+    await deleteSubCollection('hayden', 'wordStats');
+    await deleteSubCollection('hayden', 'sessions');
+    await deleteSubCollection('celine', 'wordStats');
+    await deleteSubCollection('celine', 'sessions');
+
+    fullWordLibrary = [];
+    await loadWordLibrary();
+    hideLoading();
+    document.getElementById('reset-status').textContent = '✅ 全部數據已清除！字庫和所有記錄都已重設。';
+    renderWordChips();
+    await loadParentStats();
+  } catch(e) {
+    hideLoading();
+    document.getElementById('reset-status').textContent = `❌ 清除失敗：\${e.message}`;
+  }
+};
 
 // ====== EFFECTS ======
 function createSparkles(cx, cy) {
   for (let i = 0; i < 10; i++) {
     const el = document.createElement('div');
     const angle = (Math.PI * 2 * i) / 10;
-    const dist = 40 + Math.random() * 60;
+    const dist  = 40 + Math.random() * 60;
     el.className = 'sparkle';
     el.style.cssText = `left:\${cx}px;top:\${cy}px;background:\${sparkleColors[~~(Math.random()*sparkleColors.length)]};width:\${6+Math.random()*10}px;height:\${6+Math.random()*10}px;`;
     el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
@@ -1723,7 +1734,8 @@ function createSparkles(cx, cy) {
   }
   ['⭐','✨','💫','🌟'].forEach(star => {
     const el = document.createElement('div');
-    const a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 50;
+    const a = Math.random() * Math.PI * 2;
+    const d = 50 + Math.random() * 50;
     el.className = 'star-sparkle'; el.textContent = star;
     el.style.cssText = `left:\${cx}px;top:\${cy}px;`;
     el.style.setProperty('--dx', Math.cos(a) * d + 'px');
